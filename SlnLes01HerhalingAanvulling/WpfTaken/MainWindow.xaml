@@ -7,18 +7,29 @@
         mc:Ignorable="d"
         Title="WpfTaken" Height="450" Width="800">
     <Grid>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="80,75,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="80,110,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="80,145,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="80,180,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="150,80,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <ComboBox HorizontalAlignment="Left" Margin="150,110,0,0" VerticalAlignment="Top" Width="120"/>
-        <DatePicker HorizontalAlignment="Left" Margin="150,145,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="150,185,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="255,185,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="355,185,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="364,249,0,0" VerticalAlignment="Top"/>
-        <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Margin="490,45,101,175" SelectionChanged="ListBox_SelectionChanged"/>
+        <Label x:Name="lblTaak" Content="Taak" HorizontalAlignment="Left" Margin="80,75,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblPrio" Content="Prioriteit" HorizontalAlignment="Left" Margin="80,110,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblDeadline" Content="Deadline:" HorizontalAlignment="Left" Margin="80,145,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblDoor" Content="Door" HorizontalAlignment="Left" Margin="80,180,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtTaak" HorizontalAlignment="Left" Margin="150,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="CBoxPrio" HorizontalAlignment="Left" Margin="150,110,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Laag"/>
+            <ComboBoxItem Content="Mid"/>
+            <ComboBoxItem Content="Hoog"/>
+        </ComboBox>
+
+        <DatePicker x:Name="DateDeadline" HorizontalAlignment="Left" Margin="150,145,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="rbtn1" Content="Adam" HorizontalAlignment="Left" Margin="150,185,0,0" VerticalAlignment="Top" GroupName="Door" Background="White"/>
+        <RadioButton x:Name="rbtn2" Content="Bilal" HorizontalAlignment="Left" Margin="255,185,0,0" VerticalAlignment="Top" GroupName="Door"/>
+        <RadioButton x:Name="rbtn3" Content="Chelsey" HorizontalAlignment="Left" Margin="350,185,0,0" VerticalAlignment="Top" GroupName="Door"/>
+        <Button x:Name="btnToevoegen" Content="Toevoegen" HorizontalAlignment="Left" Margin="365,245,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnToevoegen_Click"/>
+        <ListBox x:Name="lstItems" Margin="490,45,101,175"/>
+        <TextBlock x:Name="lblTaakfout" HorizontalAlignment="Left" Margin="80,290,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
+        <TextBlock x:Name="lblPrioriteit" HorizontalAlignment="Left" Margin="80,310,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
+        <Button x:Name="btnTerugzetten" Content="Terugzetten" HorizontalAlignment="Left" Margin="520,280,0,0" VerticalAlignment="Top" Width="70" Height="25" IsEnabled="False"/>
+        <Button x:Name="btnVerwijderen" Content="Verwijderen" HorizontalAlignment="Left" Margin="595,280,0,0" VerticalAlignment="Top" Height="25" Width="70" Click="btnVerwijderen_Click" IsEnabled="False"/>
+        <TextBlock x:Name="lblDeadlinefout" HorizontalAlignment="Left" Margin="80,330,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
+        <TextBlock x:Name="lblUitvoerderfout" HorizontalAlignment="Left" Margin="80,350,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
 
     </Grid>
 </Window>
