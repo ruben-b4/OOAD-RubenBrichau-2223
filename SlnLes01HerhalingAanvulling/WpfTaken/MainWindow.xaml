@@ -11,25 +11,23 @@
         <Label x:Name="lblPrio" Content="Prioriteit" HorizontalAlignment="Left" Margin="80,110,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblDeadline" Content="Deadline:" HorizontalAlignment="Left" Margin="80,145,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblDoor" Content="Door" HorizontalAlignment="Left" Margin="80,180,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtTaak" HorizontalAlignment="Left" Margin="150,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="CBoxPrio" HorizontalAlignment="Left" Margin="150,110,0,0" VerticalAlignment="Top" Width="120">
+        <TextBox x:Name="txtTaak" HorizontalAlignment="Left" Margin="150,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="SelectionChanged"/>
+        <ComboBox x:Name="CbbPrioriteit" HorizontalAlignment="Left" Margin="150,110,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="SelectionChanged">
+            <ComboBoxItem Visibility="Collapsed" Content="Selecteer..."/>
             <ComboBoxItem Content="Laag"/>
             <ComboBoxItem Content="Mid"/>
             <ComboBoxItem Content="Hoog"/>
         </ComboBox>
 
-        <DatePicker x:Name="DateDeadline" HorizontalAlignment="Left" Margin="150,145,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="rbtn1" Content="Adam" HorizontalAlignment="Left" Margin="150,185,0,0" VerticalAlignment="Top" GroupName="Door" Background="White"/>
-        <RadioButton x:Name="rbtn2" Content="Bilal" HorizontalAlignment="Left" Margin="255,185,0,0" VerticalAlignment="Top" GroupName="Door"/>
-        <RadioButton x:Name="rbtn3" Content="Chelsey" HorizontalAlignment="Left" Margin="350,185,0,0" VerticalAlignment="Top" GroupName="Door"/>
-        <Button x:Name="btnToevoegen" Content="Toevoegen" HorizontalAlignment="Left" Margin="365,245,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnToevoegen_Click"/>
-        <ListBox x:Name="lstItems" Margin="490,45,101,175"/>
-        <TextBlock x:Name="lblTaakfout" HorizontalAlignment="Left" Margin="80,290,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
-        <TextBlock x:Name="lblPrioriteit" HorizontalAlignment="Left" Margin="80,310,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
-        <Button x:Name="btnTerugzetten" Content="Terugzetten" HorizontalAlignment="Left" Margin="520,280,0,0" VerticalAlignment="Top" Width="70" Height="25" IsEnabled="False"/>
-        <Button x:Name="btnVerwijderen" Content="Verwijderen" HorizontalAlignment="Left" Margin="595,280,0,0" VerticalAlignment="Top" Height="25" Width="70" Click="btnVerwijderen_Click" IsEnabled="False"/>
-        <TextBlock x:Name="lblDeadlinefout" HorizontalAlignment="Left" Margin="80,330,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
-        <TextBlock x:Name="lblUitvoerderfout" HorizontalAlignment="Left" Margin="80,350,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="Red"/>
+        <DatePicker x:Name="DateDeadline" HorizontalAlignment="Left" Margin="150,145,0,0" VerticalAlignment="Top" SelectedDateChanged="SelectionChanged"/>
+        <RadioButton x:Name="RbdAdam" Content="Adam" HorizontalAlignment="Left" Margin="150,185,0,0" VerticalAlignment="Top" GroupName="taakuitvoerder" Background="White" Checked="SelectionChanged"/>
+        <RadioButton x:Name="RbdBilal" Content="Bilal" HorizontalAlignment="Left" Margin="255,185,0,0" VerticalAlignment="Top" GroupName="taakuitvoerder" Checked="SelectionChanged"/>
+        <RadioButton x:Name="RbnChelsey" Content="Chelsey" HorizontalAlignment="Left" Margin="350,185,0,0" VerticalAlignment="Top" GroupName="taakuitvoerder" Checked="SelectionChanged"/>
+        <Button x:Name="BtnToevoegen" Content="Toevoegen»" HorizontalAlignment="Left" Margin="365,245,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="BtnToevoegen_Click"/>
+        <TextBlock x:Name="tbkFoutmeldingen" HorizontalAlignment="Left" Margin="80,310,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Red"/>
+        <ListBox x:Name="lsbTaken" Margin="490,45,101,175" SelectionChanged="LsbTaken_SelectionChanged"/>
+        <Button x:Name="BtnTerugzetten" Content="Terugzetten" HorizontalAlignment="Left" Margin="520,280,0,0" VerticalAlignment="Top" Width="70" Height="25" IsEnabled="False" Click="BtnTerugzetten_Click"/>
+        <Button x:Name="BtnVerwijderen" Content="Verwijderen" HorizontalAlignment="Left" Margin="595,280,0,0" VerticalAlignment="Top" Height="25" Width="70" Click="BtnVerwijderen_Click" IsEnabled="False"/>
 
     </Grid>
 </Window>
