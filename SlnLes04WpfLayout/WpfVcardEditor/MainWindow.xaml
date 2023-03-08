@@ -40,7 +40,9 @@
                         <RadioButton x:Name="rbnOnbekend" Content="Onbekend" VerticalAlignment="Center" Margin="10"/>
                     </StackPanel>
                     <TextBox x:Name="tbxPriveEmail" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 5" Margin="0 0 10 0"/>
-                    <TextBox x:Name="tbxPriveTelefoon" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="120 5" Margin="0 0 10 0"/>
+                    <StackPanel Grid.Column="1" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <TextBox x:Name="tbxPriveTelefoon" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Width="239" MaxWidth="250" VerticalAlignment="Center" Padding="0 5 0 5" TextAlignment="Left"/>
+                    </StackPanel>
                     <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
                         <Button x:Name="btnSelecteer" Grid.Column="1" Grid.Row="6" Content="SELECTEER..." HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10 5 10 5"></Button>
                         <Label x:Name="txtSelectie" Grid.Column="1" Grid.Row="6" Content="(geen geselecteerd)" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10 0 0 0"></Label>
