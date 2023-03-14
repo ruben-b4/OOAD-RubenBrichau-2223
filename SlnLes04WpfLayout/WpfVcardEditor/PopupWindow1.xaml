@@ -27,6 +27,6 @@
                 <Label x:Name="txtjaar" Content="2022 - 2023" FontSize="8" Padding="0 3" ></Label>
             </StackPanel>
         </StackPanel>
-        <Button x:Name="btnClose" Content="SLUITEN" FontSize="10" Grid.Row="2" Margin="45 20" Click="btnClose_Click"></Button>
+        <Button x:Name="btnClose" Content="SLUITEN" FontSize="10" Grid.Row="2" Margin="45 20" Click="BtnClose_Click"></Button>
     </Grid>
 </Window>

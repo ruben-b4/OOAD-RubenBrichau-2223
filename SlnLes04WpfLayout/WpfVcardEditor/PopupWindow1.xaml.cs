@@ -24,7 +24,7 @@ namespace WpfVcardEditor
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

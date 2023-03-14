@@ -49,6 +49,7 @@ namespace WpfCopy
                 using (StreamWriter writer = new StreamWriter(dialog.FileName))
                 {
                     writer.Write(TbxLocatie.Text);
+                    writer.Write(TbxLocatie.Text);
                     BtnGo.IsEnabled = false;
                     lblovergezet.Visibility = Visibility.Visible;
                 }

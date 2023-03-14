@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
+using Microsoft.Win32;
 
 namespace WpfVcardEditor
 {
@@ -20,9 +24,32 @@ namespace WpfVcardEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool unsavedChanges = false;
         public MainWindow()
         {
             InitializeComponent();
+
+            tbxAchternaam.TextChanged += Card_Changed; // zal deze oproepen als er een wijziging is gebeurd
+            tbxBedrijf.TextChanged += Card_Changed;
+            tbxFacebook.TextChanged += Card_Changed;
+            tbxInstagram.TextChanged += Card_Changed;
+            tbxJobtitel.TextChanged += Card_Changed;
+            tbxLinkedIn.TextChanged += Card_Changed;
+            tbxPriveEmail.TextChanged += Card_Changed;
+            tbxPriveTelefoon.TextChanged += Card_Changed;
+            tbxTelefoon.TextChanged += Card_Changed;
+            tbxVoornaam.TextChanged += Card_Changed;
+            tbxWerkemail.TextChanged += Card_Changed;
+            tbxYoutube.TextChanged += Card_Changed;
+            rbnMan.Checked += Card_Changed;
+            rbnOnbekend.Checked += Card_Changed;
+            rbnVrouw.Checked += Card_Changed;
+            datGeboorte.SelectedDateChanged += Card_Changed;
+        }
+
+        private void Card_Changed(object sender, EventArgs e)
+        {
+            unsavedChanges = true; // zet de vlag op true
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
@@ -43,6 +70,201 @@ namespace WpfVcardEditor
         {
             PopupWindow1 popup = new PopupWindow1();
             popup.Show();
+        }
+
+        private void MniOpen_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.Filter = "vCard Files (*.vcf|*.vcf";
+
+            string content;
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string filePath = System.IO.Path.Combine(folderPath, "vCard.vcf");
+
+            try
+            {
+                content = File.ReadAllText(filePath);
+            }
+            catch (FileNotFoundException)
+            { // file not found
+                MessageBox.Show($"file {filePath} not found", "File not found", MessageBoxButton.OK);
+            }
+            catch (IOException)
+            { // unable to open for reading
+                MessageBox.Show($"Unable to open {filePath}", "Unable to open", MessageBoxButton.OK);
+            }
+            catch (Exception)
+            { // use general Exception as fallback
+                MessageBox.Show($"Unknown error reading {filePath}", "Unknown reading error", MessageBoxButton.OK);
+            }
+
+            bool? openFileDialogResult = openFileDialog.ShowDialog();
+            if (openFileDialogResult == true)
+            {
+                SaveMenuItem.IsEnabled = true;
+                string[] lines = File.ReadAllLines(openFileDialog.FileName);
+                foreach (string line in lines)
+                {
+                    // bron https://learn.microsoft.com/en-us/dotnet/api/system.string.startswith?view=net-7.0
+                    string[] volledigeNaam = line.Substring(line.LastIndexOf(":") + 1).Split(' '); // bron https://learn.microsoft.com/en-us/dotnet/api/system.string.lastindexof?view=net-8.0#system-string-lastindexof(system-string) en https://learn.microsoft.com/en-us/dotnet/api/system.string.split?view=net-7.0
+                    string ingevuldItem = line.Substring(line.LastIndexOf(":") + 1);
+
+                    if (line.StartsWith("FN;"))
+                    {
+                        tbxVoornaam.Text = volledigeNaam[0];
+                        tbxAchternaam.Text = volledigeNaam[1];
+                    }
+                    else if (line.StartsWith("TEL;TYPE=HOME"))
+                    {
+                        tbxPriveTelefoon.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("TEL;TYPE=WORK"))
+                    {
+                        tbxTelefoon.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("BDAY:"))
+                    {
+                        string bday = ingevuldItem;
+                        datGeboorte.SelectedDate = DateTime.ParseExact(bday, "yyyyMMdd", null);
+                    }
+                    else if (line.StartsWith("GENDER:"))
+                    {
+                        string gender = ingevuldItem;
+                        if (gender == "M")
+                        {
+                            rbnMan.IsChecked = true;
+                        }
+                        else if (gender == "F")
+                        {
+                            rbnVrouw.IsChecked = true;
+                        }
+                        else
+                        {
+                            rbnOnbekend.IsChecked = true;
+                        }
+                    }
+                    else if (line.StartsWith("EMAIL;CHARSET=UTF-8;type=HOME"))
+                    {
+                        tbxPriveEmail.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("ORG"))
+                    {
+                        tbxBedrijf.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("TITLE"))
+                    {
+                        tbxJobtitel.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("EMAIL;CHARSET=UTF-8;type=WORK"))
+                    {
+                        tbxWerkemail.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("X-SOCIALPROFILE;TYPE=facebook:"))
+                    {
+                        tbxFacebook.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("X-SOCIALPROFILE;TYPE=linkedin:"))
+                    {
+                        tbxLinkedIn.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("X-SOCIALPROFILE;TYPE=youtube:"))
+                    {
+                        tbxYoutube.Text = ingevuldItem;
+                    }
+                    else if (line.StartsWith("X-SOCIALPROFILE;TYPE=instagram:"))
+                    {
+                        tbxInstagram.Text = ingevuldItem;
+                    }
+                }
+            }
+        }
+
+        private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Bestand is opgeslagen", "Save");
+        }
+
+        private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog.Filter = "vCard Files (*.vcf|*.vcf";
+            saveFileDialog.FileName = "vCard.vcf";
+
+            string gender = string.Empty;
+            if (rbnVrouw.IsChecked == true)
+            {
+                gender = "F";
+            }
+            else if (rbnMan.IsChecked == true)
+            {
+                gender = "M";
+            }
+            else if (rbnOnbekend.IsChecked == true)
+            {
+                gender = "O";
+            }
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // open stream and start writing
+                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                {
+                    writer.WriteLine("BEGIN:VCARD");
+                    writer.WriteLine("VERSION:3.0");
+                    writer.WriteLine($"FN;CHARSET=UTF-8:{tbxVoornaam.Text} {tbxAchternaam.Text}");
+                    writer.WriteLine($"N;CHARSET=UTF-8:{tbxAchternaam.Text};{tbxVoornaam.Text};;;");
+                    writer.WriteLine($"NICKNAME;CHARSET=UTF-8:{tbxVoornaam.Text}");
+                    writer.WriteLine($"GENDER:{gender}");
+                    writer.WriteLine($"BDAY:{datGeboorte.SelectedDate?.ToString("yyyyMMdd")}");
+                    writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{tbxPriveEmail.Text}");
+                    writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=WORK,INTERNET:{tbxWerkemail.Text}");
+                    writer.WriteLine($"TEL;TYPE=HOME,VOICE:{tbxPriveTelefoon.Text}");
+                    writer.WriteLine($"TEL;TYPE=WORK,VOICE:{tbxTelefoon.Text}");
+                    writer.WriteLine($"ADR;CHARSET=UTF-8;TYPE=HOME:;;;;;;BelgiÃ«");
+                    writer.WriteLine($"TITLE;CHARSET=UTF-8:{tbxJobtitel.Text}");
+                    writer.WriteLine($"ORG;CHARSET=UTF-8:{tbxBedrijf.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=facebook:{tbxFacebook.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=linkedin:{tbxLinkedIn.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=instagram:{tbxInstagram.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=youtube:{tbxYoutube.Text}");
+                    writer.WriteLine($"REV:{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}");    // bron https://stackoverflow.com/questions/296920/how-do-you-get-the-current-time-of-day
+                    writer.WriteLine("END:VCARD");
+                } // stream closes automatically
+            }
+        }
+
+        private void MniNew_Click(object sender, RoutedEventArgs e)
+        {
+            if (unsavedChanges == true)
+            {
+                MessageBoxResult vraag = MessageBox.Show("Er zijn nog onopgeslagen wijzigingen, ben je zeker dat je wil verliezen?", "Wijzigingen !!", MessageBoxButton.YesNo);
+                if (vraag == MessageBoxResult.Yes)
+                {
+                    unsavedChanges = false;
+                }  
+                else if (vraag == MessageBoxResult.No)
+                {
+                    return;
+                }
+
+                tbxAchternaam.Text = "";
+                tbxBedrijf.Text = "";
+                tbxFacebook.Text = "";
+                tbxInstagram.Text = "";
+                tbxJobtitel.Text = "";
+                tbxLinkedIn.Text = "";
+                tbxPriveEmail.Text = "";
+                tbxPriveTelefoon.Text = "";
+                tbxTelefoon.Text = "";
+                tbxVoornaam.Text = "";
+                tbxWerkemail.Text = "";
+                tbxYoutube.Text = "";
+
+                unsavedChanges = false;
+            }
         }
     }
 }
