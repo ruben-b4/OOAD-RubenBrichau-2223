@@ -83,6 +83,8 @@ namespace WpfVcardEditor
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string filePath = System.IO.Path.Combine(folderPath, "vCard.vcf");
 
+            txtKaart.Content = filePath;
+
             try
             {
                 content = File.ReadAllText(filePath);
@@ -115,6 +117,19 @@ namespace WpfVcardEditor
                     {
                         tbxVoornaam.Text = volledigeNaam[0];
                         tbxAchternaam.Text = volledigeNaam[1];
+                    }
+
+                    // bron chat gpt
+                    else if (line.StartsWith("PHOTO;ENCODING=b;TYPE=")) 
+                    {
+                        string base64String = line.Substring(line.IndexOf(":") + 1); // Haal de base64-gecodeerde string op uit de vCard-tekst.
+                        byte[] imageBytes = Convert.FromBase64String(base64String); // Converteer de base64-gecodeerde string naar een byte-array.
+                        MemoryStream ms = new MemoryStream(imageBytes); // Maak een MemoryStream-object aan en schrijf het byte-array erin.
+                        BitmapImage bi = new BitmapImage(); // Maak een BitmapImage-object aan.
+                        bi.BeginInit();
+                        bi.StreamSource = ms; // Laad het MemoryStream-object in het BitmapImage-object.
+                        bi.EndInit();
+                        imgFoto.Source = bi; // Wijs het BitmapImage-object toe aan de Source-eigenschap van imgFoto.
                     }
                     else if (line.StartsWith("TEL;TYPE=HOME"))
                     {
@@ -231,6 +246,19 @@ namespace WpfVcardEditor
                     writer.WriteLine($"X-SOCIALPROFILE;TYPE=instagram:{tbxInstagram.Text}");
                     writer.WriteLine($"X-SOCIALPROFILE;TYPE=youtube:{tbxYoutube.Text}");
                     writer.WriteLine($"REV:{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}");    // bron https://stackoverflow.com/questions/296920/how-do-you-get-the-current-time-of-day
+                    
+                    // bron grotendeels chat gpt
+                    if (imgFoto.Source is BitmapSource bitmapSource)
+                    {
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            encoder.Save(ms);
+                            string base64String = Convert.ToBase64String(ms.ToArray());
+                            writer.WriteLine($"PHOTO;ENCODING=b;TYPE=JPEG:{base64String}");
+                        }
+                    }
                     writer.WriteLine("END:VCARD");
                 } // stream closes automatically
             }
@@ -244,7 +272,7 @@ namespace WpfVcardEditor
                 if (vraag == MessageBoxResult.Yes)
                 {
                     unsavedChanges = false;
-                }  
+                }
                 else if (vraag == MessageBoxResult.No)
                 {
                     return;
@@ -264,6 +292,27 @@ namespace WpfVcardEditor
                 tbxYoutube.Text = "";
 
                 unsavedChanges = false;
+            }
+        }
+
+        private void BtnSelecteer_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                string filename = openFileDialog.FileName;
+                txtSelectie.Content = filename;
+
+                BitmapImage bitmap = new BitmapImage();   // leest geselecteerde bestand en zet het om naar een BitmapImage
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;     // bron chatgpt
+                bitmap.UriSource = new Uri(filename);
+                bitmap.EndInit();
+
+                imgFoto.Source = bitmap; // koppelt BitmapImage aan Image control:
             }
         }
     }
