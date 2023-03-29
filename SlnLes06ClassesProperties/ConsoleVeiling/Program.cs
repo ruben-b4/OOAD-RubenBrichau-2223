@@ -38,7 +38,7 @@ namespace ConsoleVeiling
             Console.WriteLine($"{koper.Naam} heeft de volgende items:");
             foreach (Item item in koper.GekochteItems)
             {
-                Console.WriteLine($", {item.Naam}");
+                Console.WriteLine($"- {item.Naam}");
             }
         }
     }

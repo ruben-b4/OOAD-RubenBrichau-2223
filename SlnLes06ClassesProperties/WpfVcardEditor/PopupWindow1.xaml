@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfVcardEditor.PopupWindow1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfVcardEditor"
+        mc:Ignorable="d"
+        Title="About vCard Editor" Height="200" Width="150" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="imgOdisee" Source="images/Odisee.jpg"></Image>
+        <StackPanel HorizontalAlignment="Center" Grid.Row="1">
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Label x:Name="txtGemaakt" Content="Gemaakt door: " FontSize="8" Padding="0 3" FontWeight="Bold" />
+                <Label x:Name="txtRuben" Content=" Ruben Brichau" FontSize="8" Padding="0 3" ></Label>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Label x:Name="txtVak" Content="Vak " FontSize="8" Padding="0 3" FontWeight="Bold" />
+                <Label x:Name="txtOOAD" Content=" OO Application Development" FontSize="8" Padding="0 3"></Label>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Label x:Name="txtAcademiajaar" Content="Academiajaar " FontSize="8" Padding="0 3" FontWeight="Bold" />
+                <Label x:Name="txtjaar" Content="2022 - 2023" FontSize="8" Padding="0 3" ></Label>
+            </StackPanel>
+        </StackPanel>
+        <Button x:Name="btnClose" Content="SLUITEN" FontSize="10" Grid.Row="2" Margin="45 20" Click="BtnClose_Click"></Button>
+    </Grid>
+</Window>

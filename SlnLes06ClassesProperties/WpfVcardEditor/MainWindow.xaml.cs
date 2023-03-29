@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using static WpfVcardEditor.Contactgegevens;
 
 namespace WpfVcardEditor
 {
@@ -25,59 +24,60 @@ namespace WpfVcardEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool unsavedChanges = false;
-        private Contactgegevens contact = new Contactgegevens();
+            private bool unsavedChanges = false;
+            private Contactgegevens contact = new Contactgegevens();
+            private Afbeelding afbeelding = new Afbeelding();
 
-        public MainWindow()
+    public MainWindow()
+    {
+        InitializeComponent();
+        InitializeEventHandlers();
+    }
+
+    private void InitializeEventHandlers()
+    {
+        tbxAchternaam.TextChanged += Card_Changed;
+        tbxBedrijf.TextChanged += Card_Changed;
+        tbxFacebook.TextChanged += Card_Changed;
+        tbxInstagram.TextChanged += Card_Changed;
+        tbxJobtitel.TextChanged += Card_Changed;
+        tbxLinkedIn.TextChanged += Card_Changed;
+        tbxPriveEmail.TextChanged += Card_Changed;
+        tbxPriveTelefoon.TextChanged += Card_Changed;
+        tbxTelefoon.TextChanged += Card_Changed;
+        tbxVoornaam.TextChanged += Card_Changed;
+        tbxWerkemail.TextChanged += Card_Changed;
+        tbxYoutube.TextChanged += Card_Changed;
+        rbnMan.Checked += Card_Changed;
+        rbnOnbekend.Checked += Card_Changed;
+        rbnVrouw.Checked += Card_Changed;
+        datGeboorte.SelectedDateChanged += Card_Changed;
+    }
+
+    private void Card_Changed(object sender, EventArgs e)
+    {
+        unsavedChanges = true;
+    }
+
+    private void ExitItem_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBoxResult afsluiten = MessageBox.Show("Ben je zeker dat je de applicatie wil afsluiten?", "Toepassing sluiten", MessageBoxButton.OKCancel);
+
+        if (afsluiten == MessageBoxResult.OK)
         {
-            InitializeComponent();
-            InitializeEventHandlers();
+            Environment.Exit(0);
         }
-
-        private void InitializeEventHandlers()
+        else if (afsluiten == MessageBoxResult.Cancel)
         {
-            tbxAchternaam.TextChanged += Card_Changed;
-            tbxBedrijf.TextChanged += Card_Changed;
-            tbxFacebook.TextChanged += Card_Changed;
-            tbxInstagram.TextChanged += Card_Changed;
-            tbxJobtitel.TextChanged += Card_Changed;
-            tbxLinkedIn.TextChanged += Card_Changed;
-            tbxPriveEmail.TextChanged += Card_Changed;
-            tbxPriveTelefoon.TextChanged += Card_Changed;
-            tbxTelefoon.TextChanged += Card_Changed;
-            tbxVoornaam.TextChanged += Card_Changed;
-            tbxWerkemail.TextChanged += Card_Changed;
-            tbxYoutube.TextChanged += Card_Changed;
-            rbnMan.Checked += Card_Changed;
-            rbnOnbekend.Checked += Card_Changed;
-            rbnVrouw.Checked += Card_Changed;
-            datGeboorte.SelectedDateChanged += Card_Changed;
-        }
+            // niet sluiten
+        }  
+    }
 
-        private void Card_Changed(object sender, EventArgs e)
-        {
-            unsavedChanges = true; // zet de vlag op true
-        }
-
-        private void ExitItem_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult afsluiten = MessageBox.Show("Ben je zeker dat je de applicatie wil afsluiten?", "Toepassing sluiten", MessageBoxButton.OKCancel);
-
-            if (afsluiten == MessageBoxResult.OK)
-            {
-                Environment.Exit(0);
-            }
-            else if (afsluiten == MessageBoxResult.Cancel)
-            {
-                // niet sluiten
-            }
-        }
-
-        private void MuAbout_Click(object sender, RoutedEventArgs e)
-        {
-            PopupWindow1 popup = new PopupWindow1();
-            popup.Show();
-        }
+    private void MuAbout_Click(object sender, RoutedEventArgs e)
+    {
+        PopUpVenster popup = new PopUpVenster();
+        popup.Show();
+    }
 
         private void MniOpen_Click(object sender, RoutedEventArgs e)
         {
@@ -122,12 +122,12 @@ namespace WpfVcardEditor
 
                     if (line.StartsWith("FN;"))
                     {
-                        tbxVoornaam.Text = ingevuldItem;
-                        tbxAchternaam.Text = ingevuldItem;
+                        tbxVoornaam.Text = volledigeNaam[0];
+                        tbxAchternaam.Text = volledigeNaam[1];
                     }
 
                     // bron chat gpt
-                    else if (line.StartsWith("PHOTO;ENCODING=b;TYPE="))
+                    else if (line.StartsWith("PHOTO;ENCODING=b;TYPE=")) 
                     {
                         string base64String = line.Substring(line.IndexOf(":") + 1); // Haal de base64-gecodeerde string op uit de vCard-tekst.
                         byte[] imageBytes = Convert.FromBase64String(base64String); // Converteer de base64-gecodeerde string naar een byte-array.
@@ -210,40 +210,51 @@ namespace WpfVcardEditor
 
         private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // create a new VCard object
-            VCard vCard = new VCard
-            {
-                Voornaam = tbxVoornaam.Text,
-                Achternaam = tbxAchternaam.Text,
-                Nickname = tbxVoornaam.Text,
-                Gender = rbnVrouw.IsChecked == true ? "F" : (rbnMan.IsChecked == true ? "M" : "O"),
-                Geboortedatum = datGeboorte.SelectedDate,
-                PriveEmail = tbxPriveEmail.Text,
-                WerkEmail = tbxWerkemail.Text,
-                PriveTelefoon = tbxPriveTelefoon.Text,
-                WerkTelefoon = tbxTelefoon.Text,
-                Land = "België",
-                Jobtitel = tbxJobtitel.Text,
-                Bedrijf = tbxBedrijf.Text,
-                Facebook = tbxFacebook.Text,
-                LinkedIn = tbxLinkedIn.Text,
-                Instagram = tbxInstagram.Text,
-                Youtube = tbxYoutube.Text,
-                Foto = (BitmapImage)imgFoto.Source,
-                UpdateDatum = DateTime.Now
-            };
-
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveFileDialog.Filter = "vCard Files (*.vcf|*.vcf";
-            saveFileDialog.FileName = "vCard.vcf";
+        saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        saveFileDialog.Filter = "vCard Files (*.vcf|*.vcf";
+        saveFileDialog.FileName = "vCard.vcf";
 
-            if (saveFileDialog.ShowDialog() == true)
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            // open stream and start writing
+            using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
             {
-                // create VCardWriter and write to file
-                VCardWriter writer = new VCardWriter();
-                writer.Write(vCard, saveFileDialog.FileName);
-            }
+                writer.WriteLine("BEGIN:VCARD");
+                writer.WriteLine("VERSION:3.0");
+                writer.WriteLine($"FN;CHARSET=UTF-8:{vCard.Voornaam} {vCard.Achternaam}");
+                writer.WriteLine($"N;CHARSET=UTF-8:{vCard.Achternaam};{vCard.Voornaam};;;");
+                writer.WriteLine($"NICKNAME;CHARSET=UTF-8:{vCard.Nickname}");
+                writer.WriteLine($"GENDER:{vCard.Gender}");
+                writer.WriteLine($"BDAY:{vCard.Geboortedatum?.ToString("yyyyMMdd")}");
+                writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{vCard.PriveEmail}");
+                writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=WORK,INTERNET:{vCard.WerkEmail}");
+                writer.WriteLine($"TEL;TYPE=HOME,VOICE:{vCard.PriveTelefoon}");
+                writer.WriteLine($"TEL;TYPE=WORK,VOICE:{vCard.WerkTelefoon}");
+                writer.WriteLine($"ADR;CHARSET=UTF-8;TYPE=HOME:;;;;;;{vCard.Land}");
+                writer.WriteLine($"TITLE;CHARSET=UTF-8:{vCard.Jobtitel}");
+                writer.WriteLine($"ORG;CHARSET=UTF-8:{vCard.Bedrijf}");
+                writer.WriteLine($"X-SOCIALPROFILE;TYPE=facebook:{vCard.Facebook}");
+                writer.WriteLine($"X-SOCIALPROFILE;TYPE=linkedin:{vCard.LinkedIn}");
+                writer.WriteLine($"X-SOCIALPROFILE;TYPE=instagram:{vCard.Instagram}");
+                writer.WriteLine($"X-SOCIALPROFILE;TYPE=youtube:{vCard.Youtube}");
+                writer.WriteLine($"REV:{vCard.UpdateDatum.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}");    // bron https://stackoverflow.com/questions/296920/how-do-you-get-the-current-time-of-day
+
+                // bron grotendeels chat gpt
+                if (vCard.Foto != null)
+                {
+                    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(vCard.Foto));
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        encoder.Save(ms);
+                        string base64String = Convert.ToBase64String(ms.ToArray());
+                        writer.WriteLine($"PHOTO;ENCODING=b;TYPE=JPEG:{base64String}");
+                    }
+                }
+                writer.WriteLine("END:VCARD");
+            } // stream closes automatically
+        }
         }
 
         private void MniNew_Click(object sender, RoutedEventArgs e)
