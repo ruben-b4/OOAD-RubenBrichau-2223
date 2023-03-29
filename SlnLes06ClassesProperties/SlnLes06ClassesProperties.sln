@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleKaartspel1", "ConsoleKaartspel1\ConsoleKaartspel1.csproj", "{F793A56F-748A-405A-A81A-B0C46B137389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleVeiling", "ConsoleVeiling\ConsoleVeiling.csproj", "{48D5A463-6515-4449-BACD-036F9149E4E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +22,16 @@ Global
 		{F793A56F-748A-405A-A81A-B0C46B137389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F793A56F-748A-405A-A81A-B0C46B137389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F793A56F-748A-405A-A81A-B0C46B137389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D5A463-6515-4449-BACD-036F9149E4E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D5A463-6515-4449-BACD-036F9149E4E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D5A463-6515-4449-BACD-036F9149E4E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D5A463-6515-4449-BACD-036F9149E4E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{48D5A463-6515-4449-BACD-036F9149E4E8} = {D7FCC289-A57B-4B15-A4B8-20C64FB64FBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86863153-CD91-46D3-A6CB-860173C06DA0}

@@ -15,12 +15,14 @@ namespace ConsoleKaartspel1
             deck.Schudden();
             Speler spelerHans = new Speler("Hans");
             Speler spelerRogier = new Speler("Rogier");
+
             // deel kaarten uit
             for (int i = 0; i < AANTAL_KAARTEN_HAND; i++)
             {
                 spelerHans.Kaarten.Add(deck.NeemKaart());
                 spelerRogier.Kaarten.Add(deck.NeemKaart());
             }
+
             // speel spel
             double puntenHans = 0;
             double puntenRogier = 0;
@@ -39,6 +41,7 @@ namespace ConsoleKaartspel1
                 }
                 Console.WriteLine($"stand: Hans {puntenHans} - Rogier {puntenRogier}");
             }
+
             // einde
             if (puntenRogier == puntenHans)
             {
