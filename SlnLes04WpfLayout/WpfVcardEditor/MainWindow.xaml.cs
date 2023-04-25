@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using static WpfVcardEditor.Contactgegevens;
 
 namespace WpfVcardEditor
 {
@@ -122,8 +121,8 @@ namespace WpfVcardEditor
 
                     if (line.StartsWith("FN;"))
                     {
-                        tbxVoornaam.Text = ingevuldItem;
-                        tbxAchternaam.Text = ingevuldItem;
+                        tbxVoornaam.Text = contact.Voornaam;
+                        tbxAchternaam.Text = contact.Achternaam;
                     }
 
                     // bron chat gpt
@@ -210,39 +209,64 @@ namespace WpfVcardEditor
 
         private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // create a new VCard object
-            VCard vCard = new VCard
-            {
-                Voornaam = tbxVoornaam.Text,
-                Achternaam = tbxAchternaam.Text,
-                Nickname = tbxVoornaam.Text,
-                Gender = rbnVrouw.IsChecked == true ? "F" : (rbnMan.IsChecked == true ? "M" : "O"),
-                Geboortedatum = datGeboorte.SelectedDate,
-                PriveEmail = tbxPriveEmail.Text,
-                WerkEmail = tbxWerkemail.Text,
-                PriveTelefoon = tbxPriveTelefoon.Text,
-                WerkTelefoon = tbxTelefoon.Text,
-                Land = "België",
-                Jobtitel = tbxJobtitel.Text,
-                Bedrijf = tbxBedrijf.Text,
-                Facebook = tbxFacebook.Text,
-                LinkedIn = tbxLinkedIn.Text,
-                Instagram = tbxInstagram.Text,
-                Youtube = tbxYoutube.Text,
-                Foto = (BitmapImage)imgFoto.Source,
-                UpdateDatum = DateTime.Now
-            };
-
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saveFileDialog.Filter = "vCard Files (*.vcf|*.vcf";
             saveFileDialog.FileName = "vCard.vcf";
 
+            string gender = string.Empty;
+            if (rbnVrouw.IsChecked == true)
+            {
+                gender = "F";
+            }
+            else if (rbnMan.IsChecked == true)
+            {
+                gender = "M";
+            }
+            else if (rbnOnbekend.IsChecked == true)
+            {
+                gender = "O";
+            }
+
             if (saveFileDialog.ShowDialog() == true)
             {
-                // create VCardWriter and write to file
-                VCardWriter writer = new VCardWriter();
-                writer.Write(vCard, saveFileDialog.FileName);
+                // open stream and start writing
+                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                {
+                    writer.WriteLine("BEGIN:VCARD");
+                    writer.WriteLine("VERSION:3.0");
+                    writer.WriteLine($"FN;CHARSET=UTF-8:{tbxVoornaam.Text} {tbxAchternaam.Text}");
+                    writer.WriteLine($"N;CHARSET=UTF-8:{tbxAchternaam.Text};{tbxVoornaam.Text};;;");
+                    writer.WriteLine($"NICKNAME;CHARSET=UTF-8:{tbxVoornaam.Text}");
+                    writer.WriteLine($"GENDER:{gender}");
+                    writer.WriteLine($"BDAY:{datGeboorte.SelectedDate?.ToString("yyyyMMdd")}");
+                    writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{tbxPriveEmail.Text}");
+                    writer.WriteLine($"EMAIL;CHARSET=UTF-8;type=WORK,INTERNET:{tbxWerkemail.Text}");
+                    writer.WriteLine($"TEL;TYPE=HOME,VOICE:{tbxPriveTelefoon.Text}");
+                    writer.WriteLine($"TEL;TYPE=WORK,VOICE:{tbxTelefoon.Text}");
+                    writer.WriteLine($"ADR;CHARSET=UTF-8;TYPE=HOME:;;;;;;BelgiÃ«");
+                    writer.WriteLine($"TITLE;CHARSET=UTF-8:{tbxJobtitel.Text}");
+                    writer.WriteLine($"ORG;CHARSET=UTF-8:{tbxBedrijf.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=facebook:{tbxFacebook.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=linkedin:{tbxLinkedIn.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=instagram:{tbxInstagram.Text}");
+                    writer.WriteLine($"X-SOCIALPROFILE;TYPE=youtube:{tbxYoutube.Text}");
+                    writer.WriteLine($"REV:{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}");    // bron https://stackoverflow.com/questions/296920/how-do-you-get-the-current-time-of-day
+
+                    // bron grotendeels chat gpt
+                    if (imgFoto.Source is BitmapSource bitmapSource)
+                    {
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            encoder.Save(ms);
+                            string base64String = Convert.ToBase64String(ms.ToArray());
+                            writer.WriteLine($"PHOTO;ENCODING=b;TYPE=JPEG:{base64String}");
+                        }
+                    }
+                    writer.WriteLine("END:VCARD");
+                } // stream closes automatically
             }
         }
 
