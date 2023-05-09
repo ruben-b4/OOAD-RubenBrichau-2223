@@ -38,161 +38,52 @@ namespace WpfEscapeGame
             // define room
             Room room1 = new Room(
                 "bedroom",
-                "I seem to be in a medium sized bedroom. There is a locker to the left, a nice rug on the floor, and a bed to the right. ",
-                new BitmapImage(new Uri("img/ss-bedroom.png", UriKind.Relative))); // https://stackoverflow.com/questions/25714085/wpf-import-image-as-resource later moeten uitwerken met chatgpt
-
-            Room room2 = new Room(
-                "Living room",
-                "I seem to be in a big living room. There is one open door to a different room and another that leads somewhere else",
-                new BitmapImage(new Uri("img/ss-living.png", UriKind.Relative)));
-
-            Room room3 = new Room(
-                "computer room",
-                "I seem to be in a computer room",
-                new BitmapImage(new Uri("img/ss-computer.png", UriKind.Relative)));
+                "I seem to be in a medium sized bedroom. There is a locker to the left, a nice rug on the floor, and a bed to the right. ");
 
             // define items
             Item key1 = new Item(
                 "small silver key",
-                "A small silver key, makes me think of one I had at highschool.")
-            {
-                IsPortable = true
-            };
+                "A small silver key, makes me think of one I had at highschool.",
+                true);
             Item key2 = new Item(
                 "large key",
-                "A large key. Could this be my way out? ")
-            {
-                IsPortable = true
-            };
-
+                "A large key. Could this be my way out? ",
+                true);
             Item locker = new Item(
                 "locker",
-                "A locker. I wonder what's inside. ")
-            {
-                HiddenItem = key2,
-                IsLocked = true,
-                Key = key1,
-                IsPortable = false
-            };
+                "A locker. I wonder what's inside. ",
+                false);
 
+            locker.HiddenItem = key2;
+            locker.IsLocked = true;
+            locker.Key = key1;
             Item bed = new Item(
                 "bed",
-                "Just a bed. I am not tired right now. ")
-            {
-                IsPortable = false,
-                HiddenItem = key1
-            };
-
+                "Just a bed. I am not tired right now. ",
+                false);
             Item chair = new Item(
                "Chair",
-               "A chair, you can sit on it if you're tired ")
-            {
-                IsPortable = false
-            };
-
+               "A chair, you can sit on it if you're tired ",
+               false);
             Item poster = new Item(
                 "Poster",
-                "A poster, it covers a large part of the wall")
-            {
-                IsPortable = true
-            };
-
-            Item table = new Item(
-              "Table",
-              "A table in the middle of the room")
-            {
-                IsPortable = false
-            };
-
-            Item television = new Item(
-              "Television",
-              "A television standing upon the table")
-            {
-                IsPortable = false
-            };
-
-            Item clock = new Item(
-              "Clock",
-              "A clock hanging on the wall")
-            {
-                IsPortable = false
-            };
-
-            Item closet = new Item(
-              "Closet",
-              "A large closet")
-            {
-                IsPortable = false
-            };
-
-            Item pot = new Item(
-              "Plant pot",
-              "Big plant pot")
-            {
-                IsPortable = false
-            };
-
-            Item laptop = new Item(
-              "Laptop",
-              "A laptop, maybe i can use it?")
-            {
-                IsPortable = false
-            };
-
-            // define door
-            Door door1 = new Door(
-                "Bedroom door",
-                "Door to living room")
-            {
-                ConnectedRoom = room2,
-                Key = key2
-            };
-
-            Door door2 = new Door(
-                "Computer door",
-                "Door to computer room")
-            {
-                ConnectedRoom = room3,
-                IsLocked = true
-            };
-
-            Door door3 = new Door(
-                "Null door",
-                "Door to null")
-            {
-                ConnectedRoom = null
-            };
+                "A poster, it covers a large part of the wall",
+                true);
+            bed.HiddenItem = key1;
 
             // setup bedroom
             room1.Items.Add(new Item(
                 "floor mat",
-                "A bit ragged floor mat, but still one of the most popular designs. "));
+                "A bit ragged floor mat, but still one of the most popular designs. ",
+                true));
             room1.Items.Add(bed);
             room1.Items.Add(locker);
             room1.Items.Add(chair);
-            room1.Items.Add(door1);
-
-            // setup living room
-            room2.Items.Add(table);
-            room2.Items.Add(television);
-            room2.Items.Add(clock);
-            room2.Items.Add(door1);
-            room2.Items.Add(door2);
-
-            // setup computer room
-            room3.Items.Add(chair);
-            room3.Items.Add(table);
-            room3.Items.Add(laptop);
-            room3.Items.Add(pot);
-            room3.Items.Add(closet);
-            room3.Items.Add(door2);
-            room3.Items.Add(door3);
 
             // start game
             currentRoom = room1;
             lblMessage.Content = "I am awake, but cannot remember who I am!? Must have been a hell of a party last night... ";
             txtRoomDesc.Text = currentRoom.Description;
-            
             UpdateUI();
         }
 
@@ -202,26 +93,12 @@ namespace WpfEscapeGame
         private void UpdateUI()
         {
             lstRoomItems.Items.Clear();
-            lstRoomdoors.Items.Clear();
-
             foreach (Item itm in currentRoom.Items)
             {
-                // chatgpt gebruikt om te vinden hoe ik Door type kon adden
-                switch (itm)
-                {
-                    case Door door:
-                        lstRoomdoors.Items.Add(door);
-                        break;
-                    default:
-                        lstRoomItems.Items.Add(itm);
-                        break;
-                }
+                lstRoomItems.Items.Add(itm);
             }
-
-            imgRoom.Source = currentRoom.Image;
-            lblMessage.Content = $"You are in the {currentRoom.Name}";
-            txtRoomDesc.Text = currentRoom.Description;
         }
+
         private void LstItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             btnCheck.IsEnabled = lstRoomItems.SelectedValue != null; // room item selected
@@ -346,34 +223,6 @@ namespace WpfEscapeGame
                 Random random = new Random();
                 int index = random.Next(0, messages.Length);
                 return messages[index];
-            }
-        }
-
-        private void BtnEnter_Click(object sender, RoutedEventArgs e)
-        {
-            Room lastRoom = currentRoom;
-            Door selDoor = (Door)lstRoomdoors.SelectedItem;
-            
-            if (!selDoor.IsLocked)
-            {
-                currentRoom = selDoor.ConnectedRoom;
-                selDoor.ConnectedRoom = lastRoom;
-                UpdateUI();
-            }
-        }
-
-        private void BtnOpenWith_Click(object sender, RoutedEventArgs e)
-        {
-            Item selItem = (Item)lstMyItems.SelectedItem;
-            Door selDoor = (Door)lstRoomdoors.SelectedItem;
-            if (selDoor.Key != selItem)
-            {
-                lblMessage.Content = RandomMessageGenerator.GetRandomMessage(MessageType.Warning);
-            }
-            else
-            {
-                selDoor.IsLocked = false;
-                lblMessage.Content = $"Door {selDoor.ConnectedRoom.Name} has been unlocked";
             }
         }
     }

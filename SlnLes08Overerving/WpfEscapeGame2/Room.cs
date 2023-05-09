@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace WpfEscapeGame
 {
-    internal class Room : Actor
+    internal class Room
     {
         public List<Item> Items { get; set; } = new List<Item>();
         public ImageSource Image { get; set; }
