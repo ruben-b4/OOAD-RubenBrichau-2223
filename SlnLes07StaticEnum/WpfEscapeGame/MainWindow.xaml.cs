@@ -38,15 +38,18 @@ namespace WpfEscapeGame
             // define room
             Room room1 = new Room(
                 "bedroom",
-                "I seem to be in a medium sized bedroom. There is a locker to the left, a nice rug on the floor, and a bed to the right. ");
+                "I seem to be in a medium sized bedroom. There is a locker to the left, a nice rug on the floor, and a bed to the right. ",
+                new BitmapImage(new Uri("img/ss-bedroom.png", UriKind.Relative))); // https://stackoverflow.com/questions/25714085/wpf-import-image-as-resource later moeten uitwerken met chatgpt
 
             Room room2 = new Room(
                 "Living room",
-                "I seem to be in a big living room. There is one open door to a different room and another that leads somewhere else");
+                "I seem to be in a big living room. There is one open door to a different room and another that leads somewhere else",
+                new BitmapImage(new Uri("img/ss-living.png", UriKind.Relative)));
 
             Room room3 = new Room(
                 "computer room",
-                "I seem to be in a computer room");
+                "I seem to be in a computer room",
+                new BitmapImage(new Uri("img/ss-computer.png", UriKind.Relative)));
 
             // define items
             Item key1 = new Item(
@@ -215,6 +218,7 @@ namespace WpfEscapeGame
                 }
             }
 
+            imgRoom.Source = currentRoom.Image;
             lblMessage.Content = $"You are in the {currentRoom.Name}";
             txtRoomDesc.Text = currentRoom.Description;
         }

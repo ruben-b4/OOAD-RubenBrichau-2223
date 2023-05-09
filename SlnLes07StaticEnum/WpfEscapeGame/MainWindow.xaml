@@ -30,5 +30,10 @@ Width="239"/>
 Width="234"/>
         <Button x:Name="btnOpenWith" Content="&lt;- OPEN WITH -&gt;" HorizontalAlignment="left" Height="35" Margin="313,374,0,0" VerticalAlignment="top" Width="161" Click="BtnOpenWith_Click"/>
         <Button x:Name="btnEnter" Content="&lt;- Enter" HorizontalAlignment="left" Height="35" Margin="313,414,0,0" VerticalAlignment="top" Width="161" Click="BtnEnter_Click"/>
+        <Image x:Name="imgRoom" HorizontalAlignment="left" Height="75" Margin="528,374,0,0" VerticalAlignment="top" >
+            <Image.Source>
+                <BitmapImage DecodePixelWidth="300" UriSource="/img/ss-bedroom.png" />
+            </Image.Source>
+        </Image>
     </Grid>
 </Window>

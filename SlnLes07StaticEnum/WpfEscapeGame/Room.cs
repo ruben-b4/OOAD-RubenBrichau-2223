@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace WpfEscapeGame
 {
     internal class Room : Actor
     {
         public List<Item> Items { get; set; } = new List<Item>();
-        public List<Door> Doors { get; set; }
-        public Room(string name, string desc)
+        public ImageSource Image { get; set; }
+
+        public Room(string name, string desc, ImageSource image)
             : base(name, desc)
         {
-            Name = name;
-            Description = desc;
-            Doors = new List<Door>();
+            Image = image;
         }
     }
 }
