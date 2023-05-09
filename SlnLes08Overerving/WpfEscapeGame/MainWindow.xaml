@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfEscapeGame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
         <TextBlock x:Name="txtRoomDesc" Padding="10,10,10,10" HorizontalAlignment="Left" Height="63" Margin="24,10,0,0"
 TextWrapping="Wrap" VerticalAlignment="Top" Width="743" FontSize="16" Background="#FFF9F5F5"/>
@@ -25,10 +25,5 @@ Width="234"/>
 Width="112"/>
         <ListBox x:Name="lstMyItems" HorizontalAlignment="Left" Height="155" Margin="528,176,0,0" VerticalAlignment="Top" SelectionChanged="LstItems_SelectionChanged"
 Width="239"/>
-        <Label Content="Room doors" HorizontalAlignment="left" Height="26" Margin="24,350,0,0" VerticalAlignment="top"></Label>
-        <ListBox x:Name="lstRoomdoors" HorizontalAlignment="Left" Height="75" Margin="24,374,0,0" VerticalAlignment="Top"
-Width="234"/>
-        <Button x:Name="btnOpenWith" Content="&lt;- OPEN WITH -&gt;" HorizontalAlignment="left" Height="35" Margin="313,374,0,0" VerticalAlignment="top" Width="161" Click="BtnOpenWith_Click"/>
-        <Button x:Name="btnEnter" Content="&lt;- Enter" HorizontalAlignment="left" Height="35" Margin="313,414,0,0" VerticalAlignment="top" Width="161" Click="BtnEnter_Click"/>
     </Grid>
 </Window>

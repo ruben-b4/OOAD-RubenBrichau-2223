@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace WpfEscapeGame
 {
-    internal class Room : Actor
+    internal class Room
     {
+        public string Name { get; } // read-only: kan maar één keer ingesteld worden
+        public string Description { get; }
         public List<Item> Items { get; set; } = new List<Item>();
-        public List<Door> Doors { get; set; }
         public Room(string name, string desc)
-            : base(name, desc)
         {
             Name = name;
             Description = desc;
-            Doors = new List<Door>();
         }
     }
 }

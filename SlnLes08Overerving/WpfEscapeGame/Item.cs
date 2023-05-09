@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace WpfEscapeGame
 {
-    internal class Item : Actor
+    internal class Item
     {
-        public bool IsPortable { get; set; } = true;
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsPortable { get; set; }
         public bool IsLocked { get; set; } = false;
         public Item Key { get; set; }
         public Item HiddenItem { get; set; }
-
         public Item(string name, string desc)
-            : base(name, desc)
         {
+            Name = name;
+            Description = desc;
+        }
+        public Item(string name, string desc, bool portable)
+        {
+            Name = name;
+            Description = desc;
+            IsPortable = portable;
         }
 
         public override string ToString()
