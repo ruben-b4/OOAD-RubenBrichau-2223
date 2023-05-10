@@ -145,15 +145,15 @@ namespace WpfEscapeGame
                 "Door to living room")
             {
                 ConnectedRoom = room2,
-                Key = key2
+                Key = key2,
+                IsLocked = true
             };
 
             Door door2 = new Door(
                 "Computer door",
                 "Door to computer room")
             {
-                ConnectedRoom = room3,
-                IsLocked = true
+                ConnectedRoom = room3
             };
 
             Door door3 = new Door(
@@ -351,17 +351,15 @@ namespace WpfEscapeGame
 
         private void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
-            Room curRoom = currentRoom;
+            Room prevRoom = currentRoom;
             Door selDoor = (Door)lstRoomdoors.SelectedItem;
             
-            if (selDoor.IsLocked == true)
+            if (selDoor.IsLocked == false)
             {
                 currentRoom = selDoor.ConnectedRoom;
-                selDoor.ConnectedRoom = curRoom;
+                selDoor.ConnectedRoom = prevRoom;
                 UpdateUI();
-                lblMessage.Content = "Deze deur is op slot, zoek iets om het te openen!!"; // not inplemented yet
             }
-            
         }
 
         private void BtnOpenWith_Click(object sender, RoutedEventArgs e)

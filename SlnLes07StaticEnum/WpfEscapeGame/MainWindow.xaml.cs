@@ -354,7 +354,7 @@ namespace WpfEscapeGame
             Room lastRoom = currentRoom;
             Door selDoor = (Door)lstRoomdoors.SelectedItem;
             
-            if (!selDoor.IsLocked)
+            if (selDoor.IsLocked == true)
             {
                 currentRoom = selDoor.ConnectedRoom;
                 selDoor.ConnectedRoom = lastRoom;
