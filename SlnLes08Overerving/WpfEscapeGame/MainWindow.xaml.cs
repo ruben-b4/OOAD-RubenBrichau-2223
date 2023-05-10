@@ -351,15 +351,17 @@ namespace WpfEscapeGame
 
         private void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
-            Room lastRoom = currentRoom;
+            Room curRoom = currentRoom;
             Door selDoor = (Door)lstRoomdoors.SelectedItem;
             
-            if (!selDoor.IsLocked)
+            if (selDoor.IsLocked == true)
             {
                 currentRoom = selDoor.ConnectedRoom;
-                selDoor.ConnectedRoom = lastRoom;
+                selDoor.ConnectedRoom = curRoom;
                 UpdateUI();
+                lblMessage.Content = "Deze deur is op slot, zoek iets om het te openen!!"; // not inplemented yet
             }
+            
         }
 
         private void BtnOpenWith_Click(object sender, RoutedEventArgs e)
