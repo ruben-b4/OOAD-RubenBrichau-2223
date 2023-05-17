@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\brich\OneDrive - ODISEE\Documenten\Odisee Vakken\OOAD\github template%282%29\PROJECT\SlnBuurlenen\MyClassLibrary\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\brich\OneDrive - ODISEE\Documenten\Odisee Vakken\OOAD\github template(2)\PROJECT\SlnBuurlenen\MyClassLibrary\.editorconfig" />
+  </ItemGroup>
+
+</Project>
