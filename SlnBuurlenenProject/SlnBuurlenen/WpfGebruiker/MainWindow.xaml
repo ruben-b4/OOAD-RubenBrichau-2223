@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfGebruiker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ListBox MaxHeight="200" MaxWidth="200" Margin="100 100 100 100"></ListBox>
+        Title="WPF Buurlenen" Height="450" Width="800">
+
+    <Grid Margin="5 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="172"/>
+            <ColumnDefinition Width="224*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="31"/>
+            <RowDefinition Height="209*"/>
+        </Grid.RowDefinitions>
+        <Frame x:Name="Main" Grid.Column="1" Grid.Row="1"></Frame>
+        <StackPanel Grid.Column="1">
+            <Label Content="Type:"></Label>
+        </StackPanel>
+        <StackPanel Margin="0,31,0,0" Grid.RowSpan="2">
+            <Button x:Name="BtnHome" Content="Home" Margin="10 5" Click="BtnHome_Click"></Button>
+            <Button x:Name="BtnOntlening" Content="Ontlening" Margin="10 5" Click="BtnOntlening_Click"></Button>
+            <Button x:Name="BtnVoertuigen" Content="Voertuigen" Margin="10 5" Click="BtnVoertuigen_Click"></Button>
+        </StackPanel>
     </Grid>
 </Window>

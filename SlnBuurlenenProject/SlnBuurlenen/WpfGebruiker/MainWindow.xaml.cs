@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MyClassLibrary;
 
 namespace WpfGebruiker
 {
@@ -23,28 +24,28 @@ namespace WpfGebruiker
     public partial class MainWindow : Window
     {
         private string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
-        public MainWindow()
+        private Gebruiker gebruiker;
+        
+        public MainWindow(Gebruiker gb)
         {
             InitializeComponent();
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                // open connection
-                conn.Open();
+            gebruiker = gb;
+            Main.Content = new Home();
+        }
 
-                // voer connectie uit 
-                SqlCommand comm = new SqlCommand("SELECT id, voornaam, achternaam FROM Gebruiker", conn);
-                SqlDataReader reader = comm.ExecuteReader();
+        private void BtnHome_Click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new Home();
+        }
 
-                // lees en verwerk resultaten
-                while (reader.Read())
-                {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string firstname = Convert.ToString(reader["voornaam"]);
-                    string lastname = Convert.ToString(reader["achternaam"]);
-                    ListBoxItem item = new ListBoxItem();
-                    item.Content = $"{id}: {firstname} {lastname} ";
-                }
-            }
+        private void BtnVoertuigen_Click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new Voertuigen();
+        }
+
+        private void BtnOntlening_Click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new Ontlening();
         }
     }
 }

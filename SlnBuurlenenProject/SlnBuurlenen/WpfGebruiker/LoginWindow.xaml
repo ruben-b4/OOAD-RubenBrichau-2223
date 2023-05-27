@@ -23,10 +23,10 @@
         </Grid.RowDefinitions>
         <Label x:Name="txtGeb" Content="Email:" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Bold" FontSize="14" />
         <Label x:Name="Wachtwoord" Content="Wachtwoord:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="left" FontWeight="Bold" FontSize="14" />
-        <TextBox x:Name="tbxLogin" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged"/>
-        <TextBox x:Name="tbxWachtwoord" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged"/>
-        <Label x:Name="txtLoginError" Content="Gebruikersnaam of passwoord is incorrect" Grid.Row="4" Grid.Column="2" Padding="0 0 0 0" Foreground="#FFDA1B1B" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <Button x:Name="btnLogin" Content="Log In.." Grid.Row="5" Grid.Column="2" Padding="10 5" HorizontalAlignment="Right" VerticalAlignment="Top" IsEnabled="False" Click="BtnLogin_Click"></Button>
+        <TextBox x:Name="tbxLogin" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged" Text="rogier@odisee.be"/>
+        <TextBox x:Name="tbxWachtwoord" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged" Text="test234"/>
+        <Label x:Name="txtLoginError" Content="Gebruikersnaam of passwoord is incorrect" Grid.Row="4" Grid.Column="2" Padding="0 0 0 0" Foreground="#FFDA1B1B" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="Hidden"/>
+        <Button x:Name="btnLogin" Content="Log In.." Grid.Row="5" Grid.Column="2" Padding="10 5" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BtnLogin_Click"/>
         <ListBox x:Name="lbxResults"></ListBox>
     </Grid>
 </Window>

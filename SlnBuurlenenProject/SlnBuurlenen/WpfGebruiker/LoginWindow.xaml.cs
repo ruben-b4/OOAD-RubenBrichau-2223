@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MyClassLibrary;
 
 namespace WpfGebruiker
 {
@@ -29,34 +30,22 @@ namespace WpfGebruiker
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.btnLogin.IsEnabled = this.tbxLogin != null && this.tbxWachtwoord.Text != null;
+            // this.btnLogin.IsEnabled = this.tbxLogin != null && this.tbxWachtwoord.Text != null;
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(connString))
+            Gebruiker gebruiker = new Gebruiker();
+
+            if (!gebruiker.UserInDB(tbxLogin.Text, tbxWachtwoord.Text))
             {
-                // open connection
-                conn.Open();
-
-                // voer connectie uit 
-                SqlCommand comm = new SqlCommand("SELECT email, paswoord FROM Gebruiker where email = @Email AND paswoord = @Password", conn);
-                comm.Parameters.AddWithValue("@Email", tbxLogin.Text);
-                string password = tbxWachtwoord.Text;
-
-                SqlDataReader reader = comm.ExecuteReader();
-
-                // lees en verwerk resultaten
-                while (reader.Read())
-                {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string firstname = Convert.ToString(reader["voornaam"]);
-                    string lastname = Convert.ToString(reader["achternaam"]);
-                    ListBoxItem item = new ListBoxItem();
-                    item.Content = $"{id}: {firstname} {lastname} ";
-                    item.Tag = id;
-                    lbxResults.Items.Add(item);
-                }
+                lbxResults.Visibility = Visibility.Visible;
+            } 
+            else
+            {
+                MainWindow mainwindow = new MainWindow(gebruiker);
+                mainwindow.Show();
+                this.Close();
             }
         }
     }
