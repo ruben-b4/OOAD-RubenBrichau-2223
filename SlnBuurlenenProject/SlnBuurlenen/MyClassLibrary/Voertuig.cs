@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
+using System.Windows;
 
 namespace MyClassLibrary
 {
@@ -34,8 +38,31 @@ namespace MyClassLibrary
         public string Afmetingen { get; set; }
         public bool Geremd { get; set; }
         public int EigenaarId { get; set; }
+        public byte[] ImageData { get; set; }
         public Voertuig()
         {
         }
+        public bool GetCar(string naam, string beschrijving, string model, int id )
+        {
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                SqlCommand comm = new SqlCommand("SELECT * from [Voertuig] WHERE naam = @naam AND beschrijving = @beschrijving AND model = @model", conn);
+                comm.Parameters.AddWithValue("@naam", naam);
+                comm.Parameters.AddWithValue("@beschrijving", beschrijving);
+                comm.Parameters.AddWithValue("@model", model);
+                SqlDataReader reader = comm.ExecuteReader();
+
+                if (!reader.Read()) return false;
+                Voertuig voertuig = new Voertuig();
+                voertuig.Naam = (string)reader["naam"];
+                voertuig.Beschrijving = (string)reader["beschrijving"];
+                voertuig.Model = (string)reader["model"];
+                return true;
+            }
+        }
+
     }
 }

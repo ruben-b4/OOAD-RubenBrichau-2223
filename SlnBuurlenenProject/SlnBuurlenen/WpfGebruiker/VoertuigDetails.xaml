@@ -1,0 +1,37 @@
+﻿<Page x:Class="WpfGebruiker.VoertuigDetails"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfGebruiker"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="WPF VoertuigDetails Info">
+
+    <Grid Background="white">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="232"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="lblName" FontSize="30" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"/>
+        <Image x:Name="imgVehicle" Grid.Column="0" Grid.Row="1"/>
+        <Label x:Name="lblBeschrijving" Grid.Row="2" Grid.ColumnSpan="3" Padding="10 10 0 0"></Label>
+        <Label x:Name="lblMerk" Grid.Column="0" Grid.Row="3" Content="Merk:" Padding="10 10 0 0"/>
+        <Label x:Name="lblModel" Grid.Column="0" Grid.Row="4" Content="Model:" Padding="10 10 0 0"/>
+        <Label x:Name="lblType" Grid.Column="0" Grid.Row="5" Content="Brandstof" Padding="10 10 0 0"/>
+        <Label x:Name="lblBouwjaar" Grid.Column="1" Grid.Row="3" Content="" Padding="10 10 0 0"/>
+        <Label x:Name="lblTransmisse" Grid.Column="1" Grid.Row="4" Content="Transmisse:" Padding="10 10 0 0"/>
+        <Label x:Name="lblEigenaar" Grid.Column="1" Grid.Row="5" Content="Eigenaar:" Padding="10 10 0 0"/>
+    </Grid>
+</Page>

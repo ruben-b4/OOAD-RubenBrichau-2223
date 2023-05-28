@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <Frame x:Name="Main" Grid.Column="1" Grid.Row="1"></Frame>
         <StackPanel Grid.Column="1">
-            <Label Content="Type:"></Label>
+            <Label Content="&#xD;&#xA;"></Label>
         </StackPanel>
         <StackPanel Margin="0,31,0,0" Grid.RowSpan="2">
             <Button x:Name="BtnHome" Content="Home" Margin="10 5" Click="BtnHome_Click"></Button>

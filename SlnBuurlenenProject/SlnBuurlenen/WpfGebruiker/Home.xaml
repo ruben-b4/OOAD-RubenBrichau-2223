@@ -19,8 +19,8 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Orientation="Horizontal">
             <Label Content="Type:"></Label>
-            <CheckBox Content="Gemotoriseerd" Margin="5" x:Name="ChkAuto" Checked="ChkAuto_Checked" Unchecked="ChkAuto_Unchecked"/>
-            <CheckBox Content="Getrokken" Margin="5" x:Name="ChkMotor" Checked="ChkMotor_Checked" Unchecked="ChkMotor_Unchecked"/>
+            <CheckBox Content="Gemotoriseerd" Margin="5" x:Name="ChkAuto" Checked="ChkAuto_Checked" Unchecked="ChkAuto_Unchecked" />
+            <CheckBox Content="Getrokken" Margin="5" x:Name="ChkMotor" Checked="ChkAuto_Checked" Unchecked="ChkAuto_Unchecked"/>
         </StackPanel>
         <ScrollViewer Grid.Row="2" Grid.Column="2">
             <WrapPanel x:Name="pnlItems" Margin="10">
