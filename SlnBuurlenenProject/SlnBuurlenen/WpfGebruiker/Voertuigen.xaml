@@ -9,6 +9,21 @@
       Title="Voertuigen">
 
     <Grid Background="White">
-        <TextBlock>Voertuigen</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <Button Content="Toevoegen" VerticalAlignment="Center" Padding="10" Margin="10"/>
+        </StackPanel>
+        <ScrollViewer Grid.Row="2" Grid.Column="2" BorderThickness="2" BorderBrush="Black">
+            <WrapPanel x:Name="pnlItems" Margin="10">
+
+            </WrapPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

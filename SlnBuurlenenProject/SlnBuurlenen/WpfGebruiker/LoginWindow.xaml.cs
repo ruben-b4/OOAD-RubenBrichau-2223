@@ -39,7 +39,7 @@ namespace WpfGebruiker
 
             if (!gebruiker.UserInDB(tbxLogin.Text, tbxWachtwoord.Text))
             {
-                lbxResults.Visibility = Visibility.Visible;
+                txtLoginError.Visibility = Visibility.Visible;
             } 
             else
             {

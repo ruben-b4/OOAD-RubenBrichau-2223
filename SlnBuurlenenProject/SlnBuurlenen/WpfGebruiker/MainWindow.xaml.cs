@@ -30,17 +30,17 @@ namespace WpfGebruiker
         {
             InitializeComponent();
             gebruiker = gb;
-            Main.Content = new Home();
+            Main.Content = new Home(gebruiker);
         }
 
         private void BtnHome_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = new Home();
+            Main.Content = new Home(gebruiker);
         }
 
         private void BtnVoertuigen_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = new Voertuigen();
+            Main.Content = new Voertuigen(gebruiker);
         }
 
         private void BtnOntlening_Click(object sender, RoutedEventArgs e)
