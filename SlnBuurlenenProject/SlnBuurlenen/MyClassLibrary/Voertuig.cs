@@ -39,10 +39,11 @@ namespace MyClassLibrary
         public bool Geremd { get; set; }
         public int EigenaarId { get; set; }
         public byte[] ImageData { get; set; }
+        public Foto VoertuigFoto { get; set; }
         public Voertuig()
         {
         }
-        public bool GetCar(string naam, string beschrijving, string model, int id )
+        public bool GetCar(string naam, string beschrijving, string model, int id)
         {
             string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -64,5 +65,76 @@ namespace MyClassLibrary
             }
         }
 
+        public static List<Voertuig> GetAllVoertuigen()
+        {
+            List<Voertuig> voertuigen = new List<Voertuig>();
+
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connString))
+            {
+                connection.Open();
+
+                string query = "SELECT v.*, f.id AS foto_id, f.data AS foto_data FROM [Voertuig] v LEFT JOIN [Foto] f ON v.id = f.voertuig_id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    Voertuig currentVoertuig = null;
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int voertuigId = (int)reader["id"];
+
+                            if (currentVoertuig == null || currentVoertuig.Id != voertuigId)
+                            {
+
+                                currentVoertuig = new Voertuig
+                                {
+                                    Id = (int)reader["id"],
+                                    Naam = (string)reader["naam"],
+                                    Beschrijving = (string)reader["beschrijving"],
+                                    Bouwjaar = reader.IsDBNull(reader.GetOrdinal("bouwjaar")) ? null : (int?)reader["bouwjaar"],
+                                    Merk = reader.IsDBNull(reader.GetOrdinal("merk")) ? null : (string)reader["merk"],
+                                    Model = reader.IsDBNull(reader.GetOrdinal("model")) ? null : (string)reader["model"],
+                                    Type = reader.IsDBNull(reader.GetOrdinal("type")) ? null : (int?)reader["type"],
+                                    Gewicht = reader.IsDBNull(reader.GetOrdinal("gewicht")) ? null : (int?)reader["gewicht"],
+                                    MaxBelasting = reader.IsDBNull(reader.GetOrdinal("maxBelasting")) ? null : (int?)reader["maxBelasting"],
+                                    Afmetingen = reader.IsDBNull(reader.GetOrdinal("afmetingen")) ? string.Empty : (string)reader["afmetingen"],
+                                    EigenaarId = reader.IsDBNull(reader.GetOrdinal("eigenaar_id")) ? 0 : (int)reader["eigenaar_id"],
+                                };
+                                // Only retrieve the first photo for the current vehicle
+
+                                using (SqlConnection fotoConn = new SqlConnection(connString))
+                                {
+                                    fotoConn.Open();
+
+                                    SqlCommand fotoComm = new SqlCommand("SELECT TOP 1 * FROM [Foto] WHERE voertuig_id = @voertuigId", fotoConn);
+                                    fotoComm.Parameters.AddWithValue("@voertuigId", voertuigId);
+                                    SqlDataReader fotoReader = fotoComm.ExecuteReader();
+
+                                    if (fotoReader.Read())
+                                    {
+                                        Foto foto = new Foto
+                                        {
+                                            Id = (int)fotoReader["id"],
+                                            Data = (byte[])fotoReader["data"],
+                                            VoertuigId = (int)fotoReader["voertuig_id"]
+                                        };
+                                        currentVoertuig.ImageData = foto.Data;
+                                    }
+
+
+                                    voertuigen.Add(currentVoertuig);
+                                }
+                            }
+                        }
+                        return voertuigen;
+                    }
+
+                }
+            }
+        }
     }
 }

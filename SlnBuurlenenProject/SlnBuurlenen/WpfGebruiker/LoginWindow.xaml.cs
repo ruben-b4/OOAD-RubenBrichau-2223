@@ -36,13 +36,15 @@ namespace WpfGebruiker
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             Gebruiker gebruiker = new Gebruiker();
+            int gebruikerId;
 
-            if (!gebruiker.UserInDB(tbxLogin.Text, tbxWachtwoord.Text))
+            if (!gebruiker.UserInDB(tbxLogin.Text, tbxWachtwoord.Text, out gebruikerId))
             {
                 txtLoginError.Visibility = Visibility.Visible;
             } 
             else
             {
+                gebruiker.Id = gebruikerId;
                 MainWindow mainwindow = new MainWindow(gebruiker);
                 mainwindow.Show();
                 this.Close();

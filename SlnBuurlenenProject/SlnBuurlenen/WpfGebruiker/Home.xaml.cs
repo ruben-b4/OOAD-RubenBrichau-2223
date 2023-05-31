@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using MyClassLibrary;
 
-
 namespace WpfGebruiker
 {
     public partial class Home : Page
@@ -25,60 +24,16 @@ namespace WpfGebruiker
             InitializeComponent();
             currentUser = user;
 
-            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            voertuigen = Voertuig.GetAllVoertuigen();
 
-            // Connect to your SQL database and retrieve the image data for each vehicle
-            using (SqlConnection connection = new SqlConnection(connString))
-            {
-                connection.Open();
-
-                string query = "SELECT v.naam, v.merk, v.model, f.data, v.type, v.bouwjaar, v.beschrijving, v.eigenaar_id, v.gewicht, v.MaxBelasting, v.Geremd, v.Afmetingen " +
-                               "FROM Voertuig v " +
-                               "LEFT JOIN Foto f ON v.id = f.voertuig_id";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        voertuigen = new List<Voertuig>();
-
-                        while (reader.Read())
-                        {
-                            string naam = reader.GetString(0);
-                            string merk = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
-                            string model = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
-                            byte[] imageData = reader.IsDBNull(3) ? null : (byte[])reader["data"];
-                            int type = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);
-                            int? bouwjaar = reader.IsDBNull(5) ? null : (int?)reader.GetInt32(5);  // Retrieve Bouwjaar column
-                            string beschrijving = reader.GetString(6);
-                            int eigenaarId = reader.GetInt32(7);
-                            int gewicht = reader.IsDBNull(8) ? 0 : reader.GetInt32(8);
-                            int maxBel = reader.IsDBNull(9) ? 0 : reader.GetInt32(9);
-                            string afmeting = reader.IsDBNull(11) ? string.Empty : reader.GetString(11);
-
-                            // Create a Voertuig object
-                            Voertuig voertuig = new Voertuig
-                            {
-                                Naam = naam,
-                                Merk = merk,
-                                Model = model,
-                                ImageData = imageData,
-                                Type = type,
-                                Bouwjaar = bouwjaar,
-                                Beschrijving = beschrijving,
-                                EigenaarId = eigenaarId,
-                                Gewicht = gewicht,
-                                MaxBelasting = maxBel,
-                                Afmetingen = afmeting
-                            };
-
-                            voertuigen.Add(voertuig);
-                        }
-                    }
-                }
-            }
+            voertuigen = voertuigen.Where(v => v.EigenaarId != currentUser.Id).ToList();
 
             UpdateVehicleDisplay();
+        }
+
+        public void DisplayEigenaarNaam(int eigenaarId)
+        {
+            currentUser.GetEigenaarNaam(eigenaarId);
         }
 
         private void UpdateVehicleDisplay()
@@ -132,7 +87,6 @@ namespace WpfGebruiker
                 Button btnInfo = new Button();
                 btnInfo.Content = $"Type: {voertuig.Type}";
                 btnInfo.Click += (sender, e) =>
-
                 {
                     selectedVoertuig = voertuig;
                     VoertuigInfo(sender, e);
@@ -140,43 +94,11 @@ namespace WpfGebruiker
 
                 pnl.Children.Add(btnInfo);
 
-
                 // Add stackpanel to wrappanel
                 pnlItems.Children.Add(pnl);
             }
         }
 
-        private string GetEigenaarNaam(int eigenaarId)
-        {
-            string voornaam;
-            string achternaam; 
-            string fullnaam = string.Empty;
-
-            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
-
-            using (SqlConnection connection = new SqlConnection(connString))
-            {
-                connection.Open();
-
-                string query = "SELECT voornaam, achternaam FROM Gebruiker WHERE id = @eigenaarId";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@eigenaarId", eigenaarId);
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            voornaam = reader.GetString(0);
-                            achternaam = reader.GetString(1);
-                            fullnaam = voornaam + " " + achternaam;
-                        }
-                    }
-                }
-            }
-            return fullnaam;
-        }
         private void VoertuigInfo(object sender, RoutedEventArgs e)
         {
             if (selectedVoertuig != null)
@@ -193,7 +115,7 @@ namespace WpfGebruiker
                     detailsPage.lblMaxBel.Content = $"Max Belasting: {selectedVoertuig.MaxBelasting} kg";
                     detailsPage.lblGeremd.Content = $"Geremd: {selectedVoertuig.Geremd}";
                     detailsPage.lblBouwjaar.Content = $"Bouwjaar: {selectedVoertuig.Bouwjaar}";
-                    detailsPage.lblEigenaar.Content = $"Eigenaar: {GetEigenaarNaam(selectedVoertuig.EigenaarId)}";
+                    detailsPage.lblEigenaar.Content = $"Eigenaar: {currentUser.GetEigenaarNaam(selectedVoertuig.EigenaarId)}";
                     detailsPage.lblAfmetingen.Content = $"Afmetingen: {selectedVoertuig.Afmetingen} cm";
                     detailsPage.lblBeschrijving.Content = $"Beschrijving: {selectedVoertuig.Beschrijving}";
                     NavigationService.Navigate(detailsPage);
@@ -208,7 +130,7 @@ namespace WpfGebruiker
                     detailsPage.lblModel.Content = $"Model: {selectedVoertuig.Model}";
                     detailsPage.lblBrandstof.Content = $"Type: {selectedVoertuig.Brandstof}";
                     detailsPage.lblBouwjaar.Content = $"Bouwjaar: {selectedVoertuig.Bouwjaar}";
-                    detailsPage.lblEigenaar.Content = $"Eigenaar: {GetEigenaarNaam(selectedVoertuig.EigenaarId)}";
+                    detailsPage.lblEigenaar.Content = $"Eigenaar: {currentUser.GetEigenaarNaam(selectedVoertuig.EigenaarId)}";
                     detailsPage.lblTransmissie.Content = $"Transmissie: {selectedVoertuig.Transmissie}";
                     detailsPage.lblBeschrijving.Content = $"Beschrijving: {selectedVoertuig.Beschrijving}";
                     NavigationService.Navigate(detailsPage);

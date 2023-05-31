@@ -28,8 +28,6 @@ namespace WpfGebruiker
         private Gebruiker currentUser;
         public Voertuigen(Gebruiker user)
         {
-        
- 
             InitializeComponent();
             currentUser = user;
 
@@ -42,10 +40,13 @@ namespace WpfGebruiker
 
                 string query = "SELECT v.naam, v.merk, v.model, f.data, v.type, v.bouwjaar, v.beschrijving, v.eigenaar_id, v.gewicht, v.MaxBelasting, v.Geremd, v.Afmetingen " +
                                "FROM Voertuig v " +
-                               "LEFT JOIN Foto f ON v.id = f.voertuig_id";
+                               "LEFT JOIN Foto f ON v.id = f.voertuig_id " +
+                               "where eigenaar_id not like @parID ";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@parID", currentUser.Id);
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         voertuigen = new List<Voertuig>();
@@ -91,7 +92,7 @@ namespace WpfGebruiker
         {
             pnlItems.Children.Clear();
 
-            List<Voertuig> filteredVoertuigen = voertuigen.Where(v => v.EigenaarId == currentUser.Id).ToList();
+            List<Voertuig> filteredVoertuigen = voertuigen;
 
 
             // Display the filtered vehicles
