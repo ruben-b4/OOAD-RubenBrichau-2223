@@ -5,8 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Navigation;
+ using System.Windows.Navigation;
 using System.Windows;
+using System.Data;
 
 namespace MyClassLibrary
 {
@@ -104,7 +105,7 @@ namespace MyClassLibrary
                                     Afmetingen = reader.IsDBNull(reader.GetOrdinal("afmetingen")) ? string.Empty : (string)reader["afmetingen"],
                                     EigenaarId = reader.IsDBNull(reader.GetOrdinal("eigenaar_id")) ? 0 : (int)reader["eigenaar_id"],
                                 };
-                                // Only retrieve the first photo for the current vehicle
+                                // Only retrieve the first photo for the current vehicle chatgpt
 
                                 using (SqlConnection fotoConn = new SqlConnection(connString))
                                 {
@@ -124,16 +125,52 @@ namespace MyClassLibrary
                                         };
                                         currentVoertuig.ImageData = foto.Data;
                                     }
-
-
-                                    voertuigen.Add(currentVoertuig);
                                 }
+                                voertuigen.Add(currentVoertuig);
                             }
                         }
-                        return voertuigen;
                     }
-
                 }
+            }
+
+            return voertuigen;
+        }
+
+        public int InsertToDB()
+        {
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                SqlCommand comm = new SqlCommand(@"INSERT INTO [Voertuig] (naam, beschrijving, bouwjaar, merk, model, type, transmissie, brandstof, eigenaar_id) output INSERTED.ID VALUES(@par1,@par2,@par3,@par4,@par5,@par6,@par7,@par8,@par9)", conn);
+
+                comm.Parameters.AddWithValue("@par1", Naam);
+                comm.Parameters.AddWithValue("@par2", Beschrijving);
+                if (Bouwjaar == null)
+                {
+                    comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                }
+                else
+                {
+                    comm.Parameters.AddWithValue("@par3", Bouwjaar);
+                }
+                comm.Parameters.AddWithValue("@par4", Merk);
+                comm.Parameters.AddWithValue("@par5", Model);
+                if (Type == null)
+                {
+                    comm.Parameters.AddWithValue("@par6", DBNull.Value);
+                }
+                else
+                {
+                    comm.Parameters.AddWithValue("@par6", Type);
+                }
+                comm.Parameters.AddWithValue("@par7", Transmissie);
+                comm.Parameters.AddWithValue("@par8", Brandstof);
+                comm.Parameters.AddWithValue("@par9", EigenaarId);
+
+                return (int)comm.ExecuteScalar();
             }
         }
     }

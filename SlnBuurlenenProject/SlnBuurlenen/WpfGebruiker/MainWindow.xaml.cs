@@ -45,7 +45,7 @@ namespace WpfGebruiker
 
         private void BtnOntlening_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = new Ontlening();
+            Main.Content = new Ontlening(gebruiker);
         }
     }
 }

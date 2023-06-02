@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfGebruiker"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="800"
       Title="Ontlening">
 
     <Grid Background="White" Margin="10 10 0 0">
@@ -13,7 +13,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="350"/>
+            <RowDefinition Height="482"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -30,15 +30,44 @@
                             <RowDefinition Height="270"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Label x:Name="lblOntleend" Content="Door mij ontleend:" Padding="10 10 0 0" Grid.Row="0"></Label>
+                        <Label FontWeight="Bold" x:Name="lblOntleend" Content="Door mij ontleend:&#xD;&#xA;Rood = Verworpen, Geel = InBehandeling, Groen = Goedgekeurd" Padding="10 0 0 0" Grid.Row="0"></Label>
                         <ScrollViewer Grid.Row="1" Grid.Column="0">
                             <ListBox x:Name="lbxOntleend" Margin="10 10 0 0" ></ListBox>
                         </ScrollViewer>
-                        <Button x:Name="btnAnnuleren" Content="Annuleren" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+                        <Button x:Name="btnAnnuleren" Content="Annuleren" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="BtnAnnuleren_Click"/>
                     </Grid>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Aanvragen"></TabItem>
+            <TabItem Header="Aanvragen" Height="20" VerticalAlignment="Bottom">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="550"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="270"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label x:Name="lblAanvragen" Content="Inkomende aanvragen: &#xD;&#xA;Rood = Verworpen, Geel = InBehandeling, Groen = Goedgekeurd" Padding="10 0 0 0" Grid.Row="0" FontWeight="Bold"></Label>
+                        <ScrollViewer Grid.Row="1" Grid.Column="0">
+                            <ListBox x:Name="lbxAanvragen" Margin="10 10 0 0" SelectionChanged="LbxAanvragen_SelectionChanged" ></ListBox>
+                        </ScrollViewer>
+                        <Button x:Name="BtnAccepteren" Content="Accepteren" Grid.Column="1" Grid.Row="1" Height="20" Margin="10" VerticalAlignment="Top"  Click="BtnAccepteren_Click"/>
+                        <Button x:Name="btnAfwijzen" Content="Afwijzen" Grid.Column="1" Grid.Row="1" Height="20" Margin="10 35" VerticalAlignment="Top" Click="BtnAfwijzen_Click"/>
+                        <Label x:Name="lblDetails" Content="Details van de aanvraag:" Grid.Row="2" FontWeight="Bold"/>
+                        <Label x:Name="lblVoertuig" Content="Voertuig:" Grid.Row="3"/>
+                        <Label x:Name="lblPeriode" Content="Periode" Grid.Row="4"/>
+                        <Label x:Name="lblAanvrager" Content="Aanvrager:" Grid.Row="5"/>
+                        <Label x:Name="lblBericht" Content="Bericht:" Grid.Row="6"/>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </Grid>
 </Page>

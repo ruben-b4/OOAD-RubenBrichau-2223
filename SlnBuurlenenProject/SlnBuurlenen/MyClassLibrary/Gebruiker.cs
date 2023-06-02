@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Documents;
 
 namespace MyClassLibrary
@@ -18,6 +19,7 @@ namespace MyClassLibrary
         public int Id { get; set; }
         public string VoorNaam { get; set; }
         public string AchterNaam { get; set; }
+        public string Naam { get; set; }
         public string Email { get; set; }
         public string Passwoord { get; set; }
         public DateTime Aanmaakdatum { get; set; }
@@ -43,6 +45,16 @@ namespace MyClassLibrary
 
             userId = -1;
             return false;
+        }
+
+        public static int GetCurrentGebruikerId(string email, string paswoord)
+        {
+            int userId;
+
+            Gebruiker gebruiker = new Gebruiker();
+            bool userExists = gebruiker.UserInDB(email, paswoord, out userId);
+
+            return userExists ? userId : -1;
         }
 
         public string GetEigenaarNaam(int eigenaarId)
@@ -76,6 +88,8 @@ namespace MyClassLibrary
             }
             return fullnaam;
         }
+
+
 
         public Gebruiker()
         {
