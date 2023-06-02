@@ -134,22 +134,27 @@ namespace MyClassLibrary
         public void SaveToDB()
         {
             string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connString))
+            try
             {
-                conn.Open();
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
 
-                SqlCommand comm = new SqlCommand(@"INSERT INTO [Ontlenin]g (vanaf, tot, bericht, status, voertuig_id, aanvrager_id) VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId) SELECT SCOPE_IDENTITY()", conn);
+                    SqlCommand comm = new SqlCommand(@"INSERT INTO [Ontlening] (vanaf, tot, bericht, status, voertuig_id, aanvrager_id) OUTPUT INSERTED.ID VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId)", conn);
 
-                comm.Parameters.AddWithValue("@vanaf", Vanaf);
-                comm.Parameters.AddWithValue("@tot", Tot);
-                comm.Parameters.AddWithValue("@bericht", Bericht);
-                comm.Parameters.AddWithValue("@status", (byte)Status);
-                comm.Parameters.AddWithValue("@voertuigId", VoertuigId);
-                comm.Parameters.AddWithValue("@aanvragerId", AanvragerId);
+                    comm.Parameters.AddWithValue("@vanaf", Vanaf);
+                    comm.Parameters.AddWithValue("@tot", Tot);
+                    comm.Parameters.AddWithValue("@bericht", Bericht);
+                    comm.Parameters.AddWithValue("@status", (byte)Status);
+                    comm.Parameters.AddWithValue("@voertuigId", VoertuigId);
+                    comm.Parameters.AddWithValue("@aanvragerId", AanvragerId);
 
-                Id = Convert.ToInt32(comm.ExecuteScalar());
-
+                    Id = Convert.ToInt32(comm.ExecuteScalar());
+                }
+            }
+            catch
+            {
+                throw new Exception("Toevoegen van Ontlening was onsuccesvol, error met de ids");
             }
         }
     }

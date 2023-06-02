@@ -31,7 +31,6 @@ namespace WpfGebruiker
 
             currentUser = user;
             currentVoertuig = voertuig;
-
         }
         private void BtnAfbeeldingen_Click(object sender, RoutedEventArgs e)
         {
@@ -90,7 +89,6 @@ namespace WpfGebruiker
             {
                 return;
             }
-
 
             string naam = tbxNaam.Text; // Update the current vehicle properties
             string beschrijving = tbxBeschrijving.Text;

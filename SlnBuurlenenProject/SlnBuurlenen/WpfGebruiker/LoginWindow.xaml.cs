@@ -38,7 +38,9 @@ namespace WpfGebruiker
             Gebruiker gebruiker = new Gebruiker();
             int gebruikerId;
 
-            if (!gebruiker.UserInDB(tbxLogin.Text, tbxWachtwoord.Text, out gebruikerId))
+            string hashedPassword = StringUtils.ToSha256(tbxWachtwoord.Text);
+
+            if (!gebruiker.UserInDB(tbxLogin.Text, hashedPassword, out gebruikerId))
             {
                 txtLoginError.Visibility = Visibility.Visible;
             } 

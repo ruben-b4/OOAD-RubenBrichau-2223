@@ -40,7 +40,6 @@ namespace WpfGebruiker
         {
             pnlItems.Children.Clear();
 
-            // Filter vehicles based on the selected checkboxes
             int selectedType = 0;
 
             if (ChkAuto.IsChecked == true)
@@ -83,7 +82,7 @@ namespace WpfGebruiker
                 pnl.Children.Add(lblModel);
 
                 Button btnInfo = new Button();
-                btnInfo.Content = $"Type: {voertuig.Type}";
+                btnInfo.Content = $"Info";
                 btnInfo.Click += (sender, e) =>
                 {
                     selectedVoertuig = voertuig;
@@ -91,8 +90,6 @@ namespace WpfGebruiker
                 };
 
                 pnl.Children.Add(btnInfo);
-
-                // Add stackpanel to wrappanel
                 pnlItems.Children.Add(pnl);
             }
         }

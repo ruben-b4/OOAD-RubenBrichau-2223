@@ -213,6 +213,14 @@ namespace WpfGebruiker
                 }
             }
         }
+        public void AddOntleendItem(string content, object tag, Brush background)
+        {
+            ListBoxItem item = new ListBoxItem();
+            item.Content = content;
+            item.Tag = tag;
+            item.Background = background;
+            lbxOntleend.Items.Add(item);
+        }
     }
 }
 

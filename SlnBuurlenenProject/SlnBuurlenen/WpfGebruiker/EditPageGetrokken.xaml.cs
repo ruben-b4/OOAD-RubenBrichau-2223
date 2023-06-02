@@ -164,6 +164,5 @@ namespace WpfGebruiker
 
             NavigationService.Navigate(voertuigenPage);
         }
-
     }
 }

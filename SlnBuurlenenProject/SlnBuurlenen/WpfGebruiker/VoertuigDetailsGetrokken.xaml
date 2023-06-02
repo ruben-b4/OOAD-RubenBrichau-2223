@@ -53,7 +53,7 @@
             </StackPanel>
             <Label x:Name="lblBericht" Grid.Row="9" Content="Bericht naar eigenaar:" Padding="10 10 0 0"/>
             <TextBox x:Name="txtBericht" Grid.Row="10" Grid.ColumnSpan="2" Margin="10 10 10 10" Padding="5"></TextBox>
-            <Button x:Name="btnBevestigen" Grid.Row="10" Grid.Column="2" Content="Bevestigen" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="10 0 0 0"/>
+            <Button x:Name="btnBevestigen" Grid.Row="10" Grid.Column="2" Content="Bevestigen" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="10 0 0 0" Click="BtnBevestigen_Click"/>
             <Border Grid.Row="11" Grid.ColumnSpan="3" Background="LightGray"></Border>
         </Grid>
     </ScrollViewer>

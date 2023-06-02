@@ -25,6 +25,7 @@
         <Label x:Name="Wachtwoord" Content="Wachtwoord:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="left" FontWeight="Bold" FontSize="14" />
         <TextBox x:Name="tbxLogin" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged" Text="teo@cmb.be"/>
         <TextBox x:Name="tbxWachtwoord" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" TextChanged="TextBox_TextChanged" Text="test345"/>
+        <PasswordBox x:Name="tbxWachtwoordbox" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Padding="10 5 5 5" />
         <Label x:Name="txtLoginError" Content="Gebruikersnaam of passwoord is incorrect" Grid.Row="4" Grid.Column="2" Padding="0 0 0 0" Foreground="#FFDA1B1B" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="Hidden"/>
         <Button x:Name="btnLogin" Content="Log In.." Grid.Row="5" Grid.Column="2" Padding="10 5" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BtnLogin_Click"/>
     </Grid>
