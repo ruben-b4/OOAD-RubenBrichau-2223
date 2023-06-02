@@ -84,7 +84,7 @@ namespace MyClassLibrary
                                     EigenaarId = reader.IsDBNull(reader.GetOrdinal("eigenaar_id")) ? 0 : (int)reader["eigenaar_id"],
                                 };
 
-                                // Only retrieve the first photo for the current vehicle chatgpt
+                                // only retrieve the first photo for the current voertuig chatgpt
                                 using (SqlConnection fotoConn = new SqlConnection(connString))
                                 {
                                     fotoConn.Open();
@@ -214,6 +214,77 @@ namespace MyClassLibrary
                 SqlCommand comm = new SqlCommand("DELETE FROM [Voertuig] WHERE Id = @parID", conn);
                 comm.Parameters.AddWithValue("@parID", Id);
                 comm.ExecuteNonQuery();
+            }
+        }
+
+        public int UpdateInDb(string naam, string beschrijving, string merk, int? bouwjaar, string model, Brandstof brandstof, Transmissie transmissie, int eigenaarId, int type, byte[] imageData = null, int gewicht = 0, int maxBelasting = 0, string afmetingen = null)
+        {
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                SqlCommand comm = null;
+
+                // gemotoriseerd
+                if (Type == 2)
+                {
+                    comm = new SqlCommand(@"UPDATE [Voertuig] SET naam=@par1, beschrijving=@par2, bouwjaar=@par3, merk=@par4, model=@par5, type=@par6, transmissie=@par7, brandstof=@par8, eigenaar_id=@par9 WHERE id=@par10", conn);
+                    comm.Parameters.AddWithValue("@par1", naam);
+                    comm.Parameters.AddWithValue("@par2", beschrijving);
+                    if (bouwjaar == null)
+                    {
+                        comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                    }
+                    else
+                    {
+                        comm.Parameters.AddWithValue("@par3", bouwjaar);
+                    }
+                    comm.Parameters.AddWithValue("@par4", merk);
+                    comm.Parameters.AddWithValue("@par5", model);
+                    comm.Parameters.AddWithValue("@par6", type);
+                    comm.Parameters.AddWithValue("@par7", transmissie);
+                    comm.Parameters.AddWithValue("@par8", brandstof);
+                    comm.Parameters.AddWithValue("@par9", eigenaarId);
+                    comm.Parameters.AddWithValue("@par10", Id);
+                }
+
+                // getrokken
+                else if (Type == 1)
+                {
+                    comm = new SqlCommand(@"UPDATE [Voertuig] SET naam=@par1, beschrijving=@par2, bouwjaar=@par3, merk=@par4, model=@par5, type=@par6, gewicht=@par7, maxbelasting=@par8, afmetingen=@par9, eigenaar_id=@par10 WHERE id=@par11", conn);
+                    comm.Parameters.AddWithValue("@par1", naam);
+                    comm.Parameters.AddWithValue("@par2", beschrijving);
+                    if (bouwjaar == null)
+                    {
+                        comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                    }
+                    else
+                    {
+                        comm.Parameters.AddWithValue("@par3", bouwjaar);
+                    }
+                    comm.Parameters.AddWithValue("@par4", merk);
+                    comm.Parameters.AddWithValue("@par5", model);
+                    comm.Parameters.AddWithValue("@par6", type);
+                    comm.Parameters.AddWithValue("@par7", gewicht);
+                    comm.Parameters.AddWithValue("@par8", maxBelasting);
+                    comm.Parameters.AddWithValue("@par9", afmetingen);
+                    comm.Parameters.AddWithValue("@par10", eigenaarId);
+                    comm.Parameters.AddWithValue("@par11", Id);
+                }
+
+                comm.ExecuteNonQuery();
+                if (ImageData != null)
+                {
+                    SqlCommand commFoto = new SqlCommand(@"UPDATE [Foto] SET data=@par1, voertuigid=@par2 output INSERTED.ID VALUES(@par1, @par2)", conn);
+
+                    commFoto.Parameters.AddWithValue("@par1", ImageData);
+                    commFoto.Parameters.AddWithValue("@par2", Id);
+
+                    commFoto.ExecuteNonQuery();
+                }
+                
+                return Id;
             }
         }
     }

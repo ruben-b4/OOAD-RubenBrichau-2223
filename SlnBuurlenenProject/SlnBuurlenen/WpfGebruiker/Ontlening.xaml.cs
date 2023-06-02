@@ -24,6 +24,7 @@ namespace WpfGebruiker
     public partial class Ontlening : Page
     {
         private List<Voertuig> voertuigen;
+
         private List<MyClassLibrary.Ontlening> ontleningen;
         private Gebruiker currentUser;
 
@@ -38,12 +39,12 @@ namespace WpfGebruiker
             UpdateMijnAanvragenDisplay();
         }
 
-
         private void UpdateMijnOntleningDisplay()
         {
             lbxOntleend.Items.Clear();
             List<MyClassLibrary.Ontlening> ontleningen = MyClassLibrary.Ontlening.GetAllOntleningen();
 
+            ontleningen.Sort((o1, o2) => o2.Vanaf.CompareTo(o1.Vanaf)); // sort gevonden via chatgpt
 
             foreach (MyClassLibrary.Ontlening ontlening in ontleningen)
             {
@@ -53,14 +54,10 @@ namespace WpfGebruiker
                     string voertuigNaam = voertuig.Naam;
                     string eigenaarNaam = currentUser.GetEigenaarNaam(ontlening.AanvragerId);
                     {
-                        // List<Voertuig> voertuig = Voertuig.GetAllVoertuigen(); 
-                        ontleningen.Sort((o1, o2) => o1.Vanaf.CompareTo(o2.Vanaf)); // voor sort gebruik gemaakt van chatgpt
-
                         string itemText = $"{voertuig.Naam} - {ontlening.Vanaf} tot {ontlening.Tot}";
                         ListBoxItem item = new ListBoxItem();
                         item.Content = itemText;
                         item.Tag = ontlening;
-
 
                         switch (ontlening.Status)
                         {
@@ -80,13 +77,13 @@ namespace WpfGebruiker
                         lbxOntleend.Items.Add(item);
                     }
                 }
-
             }
         }
         private void UpdateMijnAanvragenDisplay()
         {
             lbxAanvragen.Items.Clear();
             voertuigen = Voertuig.GetAllVoertuigen();
+            ontleningen.Sort((o1, o2) => o2.Vanaf.CompareTo(o1.Vanaf)); // sort gevonden via chatgpt
 
             foreach (MyClassLibrary.Ontlening ontlening in ontleningen)
             {
@@ -157,8 +154,9 @@ namespace WpfGebruiker
                 if (ontlening != null)
                 {
                     Voertuig voertuig = voertuigen.FirstOrDefault(v => v.Id == ontlening.VoertuigId);
-
-                    if (ontlening.Vanaf > DateTime.Today) // bron https://www.c-sharpcorner.com/article/datetime-in-c-sharp/
+                    
+                    // bron https://www.c-sharpcorner.com/article/datetime-in-c-sharp/
+                    if (ontlening.Vanaf > DateTime.Today) 
                     {
                         BtnAccepteren.IsEnabled = true;
                     }
@@ -194,7 +192,6 @@ namespace WpfGebruiker
                     }
                 }
             }
-
         }
 
         private void BtnAfwijzen_Click(object sender, RoutedEventArgs e)

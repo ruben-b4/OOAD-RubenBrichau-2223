@@ -59,14 +59,12 @@ namespace WpfGebruiker
                 filteredVoertuigen = voertuigen.Where(v => v.Type == selectedType).ToList();
             }
 
-            // Display the filtered vehicles
+            // display filtered vehicles
             foreach (Voertuig voertuig in filteredVoertuigen)
             {
-                // Create stackpanel to group labels
                 StackPanel pnl = new StackPanel();
                 pnl.Margin = new Thickness(10);
 
-                // Create labels for name, brand, and model
                 Image img = new Image();
                 img.Width = 200;
                 img.Source = Foto.GetBitmapImageFromByteArray(voertuig.ImageData); // chatchpt voor images dynamisch toevoegen

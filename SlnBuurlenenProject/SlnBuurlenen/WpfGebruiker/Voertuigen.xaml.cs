@@ -58,10 +58,9 @@ namespace WpfGebruiker
 
             List<Voertuig> filteredVoertuigen = voertuigen;
 
-            // Display the filtered vehicles
+            // display the filtered vehicles
             foreach (Voertuig voertuig in filteredVoertuigen)
             {
-                // Create stackpanel to group labels and buttons
                 StackPanel pnl = new StackPanel();
                 pnl.Margin = new Thickness(10);
 
@@ -82,7 +81,7 @@ namespace WpfGebruiker
                 lblModel.Content = $"Model: {voertuig.Model}";
                 pnl.Children.Add(lblModel);
 
-                // Create a Grid for buttons
+                // create grid for buttons
                 Grid buttonGrid = new Grid();
                 buttonGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }); // gebruik chatgpt om columndefinition toe te voegen
                 buttonGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
@@ -106,8 +105,12 @@ namespace WpfGebruiker
                 Button btnEdit = new Button();
                 btnEdit.Content = "Edit";
                 btnEdit.HorizontalAlignment = HorizontalAlignment.Center;
+                btnEdit.Click += (sender, e) =>
+                {
+                    selectedVoertuig = voertuig;
+                    BtnEdit_Click(sender, e);
+                };
 
-                // Add buttons to the grid
                 buttonGrid.Children.Add(btnInfo);
                 buttonGrid.Children.Add(btnVerwijderen);
                 buttonGrid.Children.Add(btnEdit);
@@ -116,8 +119,33 @@ namespace WpfGebruiker
 
                 pnl.Children.Add(buttonGrid);
 
-                // Add stackpanel to wrappanel
                 pnlItems.Children.Add(pnl);
+            }
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedVoertuig.Type == 2)
+            {
+                EditWindowGemotoriseerd detailsPage = new EditWindowGemotoriseerd(currentUser);
+                detailsPage.Tag = 2;
+                detailsPage.tbxNaam.Text = $"{selectedVoertuig.Naam}";
+                NavigationService.Navigate(detailsPage);
+            }
+            else if (selectedVoertuig.Type == 1)
+            {
+                EditPageGetrokken detailsPage = new EditPageGetrokken(currentUser);
+                detailsPage.Tag = 1;
+                detailsPage.tbxNaam.Text = $"{selectedVoertuig.Naam}";
+                detailsPage.tbxBeschrijving.Text = $"{selectedVoertuig.Beschrijving}";
+                detailsPage.tbxMerk.Text = $"{selectedVoertuig.Merk}";
+                detailsPage.tbxGewicht.Text = $"{selectedVoertuig.Gewicht}";
+                detailsPage.tbxMaxGewicht.Text = $"{selectedVoertuig.MaxBelasting}";
+                detailsPage.tbxBouwjaar.Text = $"{selectedVoertuig.Bouwjaar}";
+                detailsPage.tbxAfmetingen.Text = $"{selectedVoertuig.Bouwjaar}";
+
+                NavigationService.Navigate(detailsPage);
+                UpdateVehicleDisplay();
             }
         }
 

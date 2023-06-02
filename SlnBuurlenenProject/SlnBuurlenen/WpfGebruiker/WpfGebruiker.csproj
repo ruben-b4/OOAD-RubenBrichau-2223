@@ -56,6 +56,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EditPageGetrokken.xaml.cs">
+      <DependentUpon>EditPageGetrokken.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditWindowGemotoriseerd.xaml.cs">
+      <DependentUpon>EditWindowGemotoriseerd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MijnVoertuigenGemotoriseerd.xaml.cs">
       <DependentUpon>MijnVoertuigenGemotoriseerd.xaml</DependentUpon>
     </Compile>
@@ -71,6 +77,14 @@
     <Compile Include="Voertuigen.xaml.cs">
       <DependentUpon>Voertuigen.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditPageGetrokken.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditWindowGemotoriseerd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

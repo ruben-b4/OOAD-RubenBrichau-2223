@@ -19,18 +19,18 @@ using MyClassLibrary;
 namespace WpfGebruiker
 {
     /// <summary>
-    /// Interaction logic for MijnVoertuigenGetrokken.xaml
+    /// Interaction logic for EditWindowGemotoriseerd.xaml
     /// </summary>
-    public partial class MijnVoertuigenGetrokken : Page
+    public partial class EditWindowGemotoriseerd : Page
     {
         private Gebruiker currentUser;
 
-        public MijnVoertuigenGetrokken(Gebruiker user)
+        public EditWindowGemotoriseerd(Gebruiker user)
         {
             InitializeComponent();
+
             currentUser = user;
         }
-
         private void BtnAfbeeldingen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -89,14 +89,13 @@ namespace WpfGebruiker
                 return;
             }
 
-            // parameters van tbx opnemen
             string naam = tbxNaam.Text;
             string beschrijving = tbxBeschrijving.Text;
             string merk = tbxMerk.Text;
             int bouwjaar = int.Parse(tbxBouwjaar.Text);
-            int gewicht = int.Parse(tbxGewicht.Text);
-            int maxGewicht = int.Parse(tbxMaxGewicht.Text);
-            string afmeting = tbxAfmetingen.Text;
+            string model = tbxModel.Text;
+            Brandstof brandstof = (Brandstof)cbxBrandstof.SelectedIndex + 1;
+            Transmissie transmissie = (Transmissie)cbxTransmissie.SelectedIndex + 1;
             int eigenaarId = currentUser.Id;
             int type = (int)Tag;
 
@@ -106,9 +105,9 @@ namespace WpfGebruiker
                 Beschrijving = beschrijving,
                 Merk = merk,
                 Bouwjaar = bouwjaar,
-                Gewicht = gewicht,
-                MaxBelasting = maxGewicht,
-                Afmetingen = afmeting,
+                Brandstof = brandstof,
+                Transmissie = transmissie,
+                Model = model,
                 EigenaarId = eigenaarId,
                 Type = type
             };
@@ -118,23 +117,23 @@ namespace WpfGebruiker
                 BitmapImage bitmapImage = (BitmapImage)imgVehicle.Source;
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    BitmapEncoder encoder = new JpegBitmapEncoder(); // gebruik gemaakt van chatgpt, functioneert niet
+                    BitmapEncoder encoder = new JpegBitmapEncoder(); // gebruik gemaakt van chatgpt om img toe te voegen, functioneert niet
                     encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                     encoder.Save(stream);
                     voertuig.ImageData = stream.ToArray();
                 }
             }
 
-            int newId = voertuig.InsertToDB(naam, beschrijving, merk, bouwjaar, string.Empty, Brandstof.Benzine, Transmissie.Manueel, eigenaarId, type, voertuig.ImageData, gewicht, maxGewicht, afmeting);
+            int newId = voertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
             NavigationService.Navigate(voertuigenPage);
         }
 
         private bool ValidateForm()
         {
-            // checker op validatie van naam beschrijving
             bool isValid = true;
 
+            // Validate 'tbxNaam'
             if (string.IsNullOrWhiteSpace(tbxNaam.Text))
             {
                 lblNaamCheck.Visibility = Visibility.Visible;
@@ -145,6 +144,7 @@ namespace WpfGebruiker
                 lblNaamCheck.Visibility = Visibility.Collapsed;
             }
 
+            // Validate 'tbxBeschrijving'
             if (string.IsNullOrWhiteSpace(tbxBeschrijving.Text))
             {
                 lblBeschrijvingCheck.Visibility = Visibility.Visible;

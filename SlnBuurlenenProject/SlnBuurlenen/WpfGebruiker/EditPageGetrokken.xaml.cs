@@ -19,13 +19,13 @@ using MyClassLibrary;
 namespace WpfGebruiker
 {
     /// <summary>
-    /// Interaction logic for MijnVoertuigenGetrokken.xaml
+    /// Interaction logic for EditPageGetrokken.xaml
     /// </summary>
-    public partial class MijnVoertuigenGetrokken : Page
+    public partial class EditPageGetrokken : Page
     {
         private Gebruiker currentUser;
 
-        public MijnVoertuigenGetrokken(Gebruiker user)
+        public EditPageGetrokken(Gebruiker user)
         {
             InitializeComponent();
             currentUser = user;
@@ -125,7 +125,7 @@ namespace WpfGebruiker
                 }
             }
 
-            int newId = voertuig.InsertToDB(naam, beschrijving, merk, bouwjaar, string.Empty, Brandstof.Benzine, Transmissie.Manueel, eigenaarId, type, voertuig.ImageData, gewicht, maxGewicht, afmeting);
+            int newId = voertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, string.Empty, Brandstof.Benzine, Transmissie.Manueel, eigenaarId, type, voertuig.ImageData, gewicht, maxGewicht, afmeting);
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
             NavigationService.Navigate(voertuigenPage);
         }
@@ -164,5 +164,6 @@ namespace WpfGebruiker
 
             NavigationService.Navigate(voertuigenPage);
         }
+
     }
 }

@@ -33,7 +33,6 @@ namespace WpfGebruiker
 
         private void BtnAfbeeldingen_Click(object sender, RoutedEventArgs e)
         {
-            // Open een open-bestandsdialog om een afbeeldingsbestand te selecteren
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Afbeeldingsbestanden|*.jpg;*.jpeg;*.png;*.gif";
             openFileDialog.Multiselect = true;
@@ -75,7 +74,6 @@ namespace WpfGebruiker
                     }
                 }
 
-                // Voeg de StackPanel met afbeeldingen toe aan de Grid
                 Grid.SetColumn(imageStackPanel, 1);
                 Grid.SetRow(imageStackPanel, 2);
                 Grid.SetColumnSpan(imageStackPanel, 2);
@@ -83,7 +81,7 @@ namespace WpfGebruiker
             }
         }
 
-        private void btnOpslaan_Click(object sender, RoutedEventArgs e)
+        private void BtnOpslaan_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateForm())
             {
@@ -118,14 +116,14 @@ namespace WpfGebruiker
                 BitmapImage bitmapImage = (BitmapImage)imgVehicle.Source;
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    BitmapEncoder encoder = new JpegBitmapEncoder(); // Pas het juiste type encoder aan op basis van het afbeeldingsformaa, gebruik gemaakt van chatgpt, functioneert niet
+                    BitmapEncoder encoder = new JpegBitmapEncoder(); // gebruik gemaakt van chatgpt om img toe te voegen, functioneert niet
                     encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                     encoder.Save(stream);
                     voertuig.ImageData = stream.ToArray();
                 }
             }
 
-            int newId = voertuig.InsertToDB(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
+            int newId = voertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
             NavigationService.Navigate(voertuigenPage);
         }
@@ -148,7 +146,7 @@ namespace WpfGebruiker
             // Validate 'tbxBeschrijving'
             if (string.IsNullOrWhiteSpace(tbxBeschrijving.Text))
             {
-                lblBeschrijvingCheck.Visibility= Visibility.Visible;
+                lblBeschrijvingCheck.Visibility = Visibility.Visible;
                 isValid = false;
             }
             else
@@ -159,7 +157,7 @@ namespace WpfGebruiker
             return isValid;
         }
 
-        private void btnAnnuleren_Click(object sender, RoutedEventArgs e)
+        private void BtnAnnuleren_Click(object sender, RoutedEventArgs e)
         {
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
 

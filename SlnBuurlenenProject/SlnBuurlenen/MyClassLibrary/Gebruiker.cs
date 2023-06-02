@@ -24,6 +24,15 @@ namespace MyClassLibrary
         public string Passwoord { get; set; }
         public DateTime Aanmaakdatum { get; set; }
         public byte[] Profielfoto { get; set; }
+        public static int GetCurrentGebruikerId(string email, string paswoord)
+        {
+            int userId;
+
+            Gebruiker gebruiker = new Gebruiker();
+            bool userExists = gebruiker.UserInDB(email, paswoord, out userId);
+
+            return userExists ? userId : -1;
+        }
         public bool UserInDB(string email, string paswoord, out int userId)
         {
             using (SqlConnection conn = new SqlConnection(connString))
@@ -45,16 +54,6 @@ namespace MyClassLibrary
 
             userId = -1;
             return false;
-        }
-
-        public static int GetCurrentGebruikerId(string email, string paswoord)
-        {
-            int userId;
-
-            Gebruiker gebruiker = new Gebruiker();
-            bool userExists = gebruiker.UserInDB(email, paswoord, out userId);
-
-            return userExists ? userId : -1;
         }
 
         public string GetEigenaarNaam(int eigenaarId)
@@ -88,8 +87,6 @@ namespace MyClassLibrary
             }
             return fullnaam;
         }
-
-
 
         public Gebruiker()
         {
