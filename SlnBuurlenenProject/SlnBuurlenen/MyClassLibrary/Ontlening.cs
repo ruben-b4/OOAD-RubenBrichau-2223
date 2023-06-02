@@ -41,7 +41,7 @@ namespace MyClassLibrary
                     "FROM Ontlening o " +
                     "JOIN Gebruiker ON o.aanvrager_id = Gebruiker.id " +
                     "JOIN Voertuig ON o.voertuig_id = Voertuig.id ";
-   
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     Ontlening currentOntlening = null;
@@ -65,7 +65,7 @@ namespace MyClassLibrary
                                     VoertuigId = (int)reader["voertuig_id"],
                                     AanvragerId = (int)reader["aanvrager_id"]
                                 };
-                     
+
                                 ontleningen.Add(currentOntlening);
                             }
                         }
@@ -139,38 +139,20 @@ namespace MyClassLibrary
             {
                 conn.Open();
 
-                if (Id == 0)
-                {
-                    // als ontlening nog niet bestaat
-                    SqlCommand comm = new SqlCommand(@"INSERT INTO Ontlening (vanaf, tot, bericht, status, voertuig_id, aanvrager_id) VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId) SELECT SCOPE_IDENTITY()", conn);
- 
-                    comm.Parameters.AddWithValue("@vanaf", Vanaf);
-                    comm.Parameters.AddWithValue("@tot", Tot);
-                    comm.Parameters.AddWithValue("@bericht", Bericht);
-                    comm.Parameters.AddWithValue("@status", (byte)Status);
-                    comm.Parameters.AddWithValue("@voertuigId", VoertuigId);
-                    comm.Parameters.AddWithValue("@aanvragerId", AanvragerId);
+                SqlCommand comm = new SqlCommand(@"INSERT INTO [Ontlenin]g (vanaf, tot, bericht, status, voertuig_id, aanvrager_id) VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId) SELECT SCOPE_IDENTITY()", conn);
 
-                    Id = Convert.ToInt32(comm.ExecuteScalar());
-                }
-                else
-                {
-                    // Bestaande ontlening, update deze in de database
-                    SqlCommand comm = new SqlCommand(@"UPDATE Ontlening SET [vanaf] = @vanaf, [tot] = @tot, bericht = @bericht, status = @status, voertuig_id = @voertuigId, aanvrager_id = @aanvragerId WHERE id = @ontleningId", conn);              
+                comm.Parameters.AddWithValue("@vanaf", Vanaf);
+                comm.Parameters.AddWithValue("@tot", Tot);
+                comm.Parameters.AddWithValue("@bericht", Bericht);
+                comm.Parameters.AddWithValue("@status", (byte)Status);
+                comm.Parameters.AddWithValue("@voertuigId", VoertuigId);
+                comm.Parameters.AddWithValue("@aanvragerId", AanvragerId);
 
-                    comm.Parameters.AddWithValue("@vanaf", Vanaf);
-                    comm.Parameters.AddWithValue("@tot", Tot);
-                    comm.Parameters.AddWithValue("@bericht", Bericht);
-                    comm.Parameters.AddWithValue("@status", (byte)Status);
-                    comm.Parameters.AddWithValue("@voertuigId", VoertuigId);
-                    comm.Parameters.AddWithValue("@aanvragerId", AanvragerId);
-                    comm.Parameters.AddWithValue("@ontleningId", Id);
+                Id = Convert.ToInt32(comm.ExecuteScalar());
 
-                    comm.ExecuteNonQuery();
-                }
             }
         }
     }
 }
 
-                    
+

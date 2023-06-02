@@ -24,7 +24,7 @@ namespace WpfGebruiker
     public partial class EditPageGetrokken : Page
     {
         private Gebruiker currentUser;
-
+        
         public EditPageGetrokken(Gebruiker user)
         {
             InitializeComponent();

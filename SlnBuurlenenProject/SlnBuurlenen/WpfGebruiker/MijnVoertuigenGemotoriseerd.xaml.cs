@@ -123,7 +123,7 @@ namespace WpfGebruiker
                 }
             }
 
-            int newId = voertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
+            int newId = voertuig.InsertToDB(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
             NavigationService.Navigate(voertuigenPage);
         }

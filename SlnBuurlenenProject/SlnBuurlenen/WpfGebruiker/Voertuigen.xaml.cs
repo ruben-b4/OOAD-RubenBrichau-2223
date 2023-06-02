@@ -125,17 +125,17 @@ namespace WpfGebruiker
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedVoertuig.Type == 2)
+            if (selectedVoertuig.Type == 1)
             {
-                EditWindowGemotoriseerd detailsPage = new EditWindowGemotoriseerd(currentUser);
-                detailsPage.Tag = 2;
+                EditWindowGemotoriseerd detailsPage = new EditWindowGemotoriseerd(currentUser, selectedVoertuig);
+                detailsPage.Tag = 1;
                 detailsPage.tbxNaam.Text = $"{selectedVoertuig.Naam}";
                 NavigationService.Navigate(detailsPage);
             }
-            else if (selectedVoertuig.Type == 1)
+            else if (selectedVoertuig.Type == 2)
             {
                 EditPageGetrokken detailsPage = new EditPageGetrokken(currentUser);
-                detailsPage.Tag = 1;
+                detailsPage.Tag = 2;
                 detailsPage.tbxNaam.Text = $"{selectedVoertuig.Naam}";
                 detailsPage.tbxBeschrijving.Text = $"{selectedVoertuig.Beschrijving}";
                 detailsPage.tbxMerk.Text = $"{selectedVoertuig.Merk}";

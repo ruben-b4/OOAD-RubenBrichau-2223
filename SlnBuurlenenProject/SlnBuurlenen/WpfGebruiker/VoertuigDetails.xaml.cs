@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MyClassLibrary;
-using WpfGebruiker; // Voeg de juiste namespace toe
 
 namespace WpfGebruiker
 {
@@ -22,9 +21,21 @@ namespace WpfGebruiker
     /// </summary>
     public partial class VoertuigDetails : Page
     {
+        private Gebruiker currentUser;
+        private List<Voertuig> voertuigen;
+        private Voertuig currentVoertuig;
+
+
         public VoertuigDetails()
         {
             InitializeComponent();
+
+        }
+
+        private void BtnBevestigen_Click(object sender, RoutedEventArgs e)
+        {
+
+
         }
     }
 }

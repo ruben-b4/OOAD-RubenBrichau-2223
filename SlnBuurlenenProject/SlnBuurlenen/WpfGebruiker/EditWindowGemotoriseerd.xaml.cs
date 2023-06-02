@@ -24,12 +24,14 @@ namespace WpfGebruiker
     public partial class EditWindowGemotoriseerd : Page
     {
         private Gebruiker currentUser;
-
-        public EditWindowGemotoriseerd(Gebruiker user)
+        private Voertuig currentVoertuig;
+        public EditWindowGemotoriseerd(Gebruiker user, Voertuig voertuig)
         {
             InitializeComponent();
 
             currentUser = user;
+            currentVoertuig = voertuig;
+
         }
         private void BtnAfbeeldingen_Click(object sender, RoutedEventArgs e)
         {
@@ -89,13 +91,22 @@ namespace WpfGebruiker
                 return;
             }
 
-            string naam = tbxNaam.Text;
+
+            string naam = tbxNaam.Text; // Update the current vehicle properties
             string beschrijving = tbxBeschrijving.Text;
             string merk = tbxMerk.Text;
-            int bouwjaar = int.Parse(tbxBouwjaar.Text);
-            string model = tbxModel.Text;
+            int bouwjaar;
+            if (int.TryParse(tbxBouwjaar.Text, out bouwjaar))
+            {
+                currentVoertuig.Bouwjaar = bouwjaar;
+            }
+            else
+            {
+                currentVoertuig.Bouwjaar = null; // or any default value you prefer when the conversion fails
+            }
             Brandstof brandstof = (Brandstof)cbxBrandstof.SelectedIndex + 1;
             Transmissie transmissie = (Transmissie)cbxTransmissie.SelectedIndex + 1;
+            string model = tbxModel.Text;
             int eigenaarId = currentUser.Id;
             int type = (int)Tag;
 
@@ -124,7 +135,7 @@ namespace WpfGebruiker
                 }
             }
 
-            int newId = voertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, voertuig.ImageData);
+            int newId = currentVoertuig.UpdateInDb(naam, beschrijving, merk, bouwjaar, model, brandstof, transmissie, eigenaarId, type, currentVoertuig.ImageData);
             Voertuigen voertuigenPage = new Voertuigen(currentUser);
             NavigationService.Navigate(voertuigenPage);
         }
