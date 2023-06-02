@@ -24,8 +24,6 @@ namespace WpfGebruiker
     public partial class Ontlening : Page
     {
         private List<Voertuig> voertuigen;
-        private Voertuig selectedVoertuig;
-        private Ontlening currentOntlening;
         private List<MyClassLibrary.Ontlening> ontleningen;
         private Gebruiker currentUser;
 

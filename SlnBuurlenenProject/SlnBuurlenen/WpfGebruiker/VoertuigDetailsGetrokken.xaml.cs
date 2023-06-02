@@ -20,7 +20,6 @@ namespace WpfGebruiker
     /// </summary>
     public partial class VoertuigDetailsGetrokken : Page
     {
-
         public VoertuigDetailsGetrokken()
         {
             InitializeComponent();

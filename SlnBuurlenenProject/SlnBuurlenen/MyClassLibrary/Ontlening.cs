@@ -50,14 +50,11 @@ namespace MyClassLibrary
                     {
                         while (reader.Read())
                         {
-
                             int ontleningId = (int)reader["id"];
                             byte statusValue = (byte)reader["status"];
 
-
                             if (currentOntlening == null || currentOntlening.Id != ontleningId)
                             {
-
                                 currentOntlening = new Ontlening
                                 {
                                     Id = (int)reader["id"],
@@ -70,7 +67,6 @@ namespace MyClassLibrary
                                 };
                      
                                 ontleningen.Add(currentOntlening);
-
                             }
                         }
                         return ontleningen;
@@ -145,10 +141,9 @@ namespace MyClassLibrary
 
                 if (Id == 0)
                 {
-                    // Nieuwe ontlening, voeg deze toe aan de database
-                    SqlCommand comm = new SqlCommand(@"INSERT INTO Ontlening (vanaf, tot, bericht, status, voertuig_id, aanvrager_id)
-                                               VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId);
-                                               SELECT SCOPE_IDENTITY();", conn);
+                    // als ontlening nog niet bestaat
+                    SqlCommand comm = new SqlCommand(@"INSERT INTO Ontlening (vanaf, tot, bericht, status, voertuig_id, aanvrager_id) VALUES (@vanaf, @tot, @bericht, @status, @voertuigId, @aanvragerId) SELECT SCOPE_IDENTITY()", conn);
+ 
                     comm.Parameters.AddWithValue("@vanaf", Vanaf);
                     comm.Parameters.AddWithValue("@tot", Tot);
                     comm.Parameters.AddWithValue("@bericht", Bericht);
@@ -161,9 +156,7 @@ namespace MyClassLibrary
                 else
                 {
                     // Bestaande ontlening, update deze in de database
-                    SqlCommand comm = new SqlCommand(@"UPDATE Ontlening
-                                               SET [vanaf] = @vanaf, [tot] = @tot, bericht = @bericht, status = @status, voertuig_id = @voertuigId, aanvrager_id = @aanvragerId
-                                               WHERE id = @ontleningId", conn);
+                    SqlCommand comm = new SqlCommand(@"UPDATE Ontlening SET [vanaf] = @vanaf, [tot] = @tot, bericht = @bericht, status = @status, voertuig_id = @voertuigId, aanvrager_id = @aanvragerId WHERE id = @ontleningId", conn);              
 
                     comm.Parameters.AddWithValue("@vanaf", Vanaf);
                     comm.Parameters.AddWithValue("@tot", Tot);

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- using System.Windows.Navigation;
 using System.Windows;
-using System.Data;
+using System.Windows.Navigation;
 
 namespace MyClassLibrary
 {
@@ -44,27 +44,6 @@ namespace MyClassLibrary
         public Voertuig()
         {
         }
-        public bool GetCar(string naam, string beschrijving, string model, int id)
-        {
-            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                conn.Open();
-
-                SqlCommand comm = new SqlCommand("SELECT * from [Voertuig] WHERE naam = @naam AND beschrijving = @beschrijving AND model = @model", conn);
-                comm.Parameters.AddWithValue("@naam", naam);
-                comm.Parameters.AddWithValue("@beschrijving", beschrijving);
-                comm.Parameters.AddWithValue("@model", model);
-                SqlDataReader reader = comm.ExecuteReader();
-
-                if (!reader.Read()) return false;
-                Voertuig voertuig = new Voertuig();
-                voertuig.Naam = (string)reader["naam"];
-                voertuig.Beschrijving = (string)reader["beschrijving"];
-                voertuig.Model = (string)reader["model"];
-                return true;
-            }
-        }
 
         public static List<Voertuig> GetAllVoertuigen()
         {
@@ -90,7 +69,6 @@ namespace MyClassLibrary
 
                             if (currentVoertuig == null || currentVoertuig.Id != voertuigId)
                             {
-
                                 currentVoertuig = new Voertuig
                                 {
                                     Id = (int)reader["id"],
@@ -105,8 +83,8 @@ namespace MyClassLibrary
                                     Afmetingen = reader.IsDBNull(reader.GetOrdinal("afmetingen")) ? string.Empty : (string)reader["afmetingen"],
                                     EigenaarId = reader.IsDBNull(reader.GetOrdinal("eigenaar_id")) ? 0 : (int)reader["eigenaar_id"],
                                 };
-                                // Only retrieve the first photo for the current vehicle chatgpt
 
+                                // Only retrieve the first photo for the current vehicle chatgpt
                                 using (SqlConnection fotoConn = new SqlConnection(connString))
                                 {
                                     fotoConn.Open();
@@ -135,8 +113,29 @@ namespace MyClassLibrary
 
             return voertuigen;
         }
+        public bool GetCar(string naam, string beschrijving, string model, int id)
+        {
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
 
-        public int InsertToDB()
+                SqlCommand comm = new SqlCommand("SELECT * from [Voertuig] WHERE naam = @naam AND beschrijving = @beschrijving AND model = @model", conn);
+                comm.Parameters.AddWithValue("@naam", naam);
+                comm.Parameters.AddWithValue("@beschrijving", beschrijving);
+                comm.Parameters.AddWithValue("@model", model);
+                SqlDataReader reader = comm.ExecuteReader();
+
+                if (!reader.Read()) return false;
+                Voertuig voertuig = new Voertuig();
+                voertuig.Naam = (string)reader["naam"];
+                voertuig.Beschrijving = (string)reader["beschrijving"];
+                voertuig.Model = (string)reader["model"];
+                return true;
+            }
+        }
+        
+        public int InsertToDB(string naam, string beschrijving, string merk, int? bouwjaar, string model, Brandstof brandstof, Transmissie transmissie, int eigenaarId, int type, byte[] imageData = null, int gewicht = 0, int maxBelasting = 0, string afmetingen = null)
         {
             string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
 
@@ -144,33 +143,77 @@ namespace MyClassLibrary
             {
                 conn.Open();
 
-                SqlCommand comm = new SqlCommand(@"INSERT INTO [Voertuig] (naam, beschrijving, bouwjaar, merk, model, type, transmissie, brandstof, eigenaar_id) output INSERTED.ID VALUES(@par1,@par2,@par3,@par4,@par5,@par6,@par7,@par8,@par9)", conn);
+                SqlCommand comm = null;
 
-                comm.Parameters.AddWithValue("@par1", Naam);
-                comm.Parameters.AddWithValue("@par2", Beschrijving);
-                if (Bouwjaar == null)
+                // gemotoriseerd
+                if (Type == 2) 
                 {
-                    comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                    comm = new SqlCommand(@"INSERT INTO [Voertuig] (naam, beschrijving, bouwjaar, merk, model, type, transmissie, brandstof, eigenaar_id) output INSERTED.ID VALUES(@par1,@par2,@par3,@par4,@par5,@par6,@par7,@par8,@par9)", conn);
+                    comm.Parameters.AddWithValue("@par1", naam);
+                    comm.Parameters.AddWithValue("@par2", beschrijving);
+                    if (bouwjaar == null)
+                    {
+                        comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                    }
+                    else
+                    {
+                        comm.Parameters.AddWithValue("@par3", bouwjaar);
+                    }
+                    comm.Parameters.AddWithValue("@par4", merk);
+                    comm.Parameters.AddWithValue("@par5", model);
+                    comm.Parameters.AddWithValue("@par6", type);
+                    comm.Parameters.AddWithValue("@par7", transmissie);
+                    comm.Parameters.AddWithValue("@par8", brandstof);
+                    comm.Parameters.AddWithValue("@par9", eigenaarId);
                 }
-                else
-                {
-                    comm.Parameters.AddWithValue("@par3", Bouwjaar);
-                }
-                comm.Parameters.AddWithValue("@par4", Merk);
-                comm.Parameters.AddWithValue("@par5", Model);
-                if (Type == null)
-                {
-                    comm.Parameters.AddWithValue("@par6", DBNull.Value);
-                }
-                else
-                {
-                    comm.Parameters.AddWithValue("@par6", Type);
-                }
-                comm.Parameters.AddWithValue("@par7", Transmissie);
-                comm.Parameters.AddWithValue("@par8", Brandstof);
-                comm.Parameters.AddWithValue("@par9", EigenaarId);
 
-                return (int)comm.ExecuteScalar();
+                // getrokken
+                else if (Type == 1) 
+                {
+                    comm = new SqlCommand(@"INSERT INTO [Voertuig] (naam, beschrijving, bouwjaar, merk, model, type, gewicht, maxbelasting, afmetingen, eigenaar_id) OUTPUT INSERTED.ID VALUES (@par1, @par2, @par3, @par4, @par5, @par6, @par7, @par8, @par9, @par10)", conn);
+                    comm.Parameters.AddWithValue("@par1", naam);
+                    comm.Parameters.AddWithValue("@par2", beschrijving);
+                    if (bouwjaar == null)
+                    {
+                        comm.Parameters.AddWithValue("@par3", DBNull.Value);
+                    }
+                    else
+                    {
+                        comm.Parameters.AddWithValue("@par3", bouwjaar);
+                    }
+                    comm.Parameters.AddWithValue("@par4", merk);
+                    comm.Parameters.AddWithValue("@par5", model);
+                    comm.Parameters.AddWithValue("@par6", type);
+                    comm.Parameters.AddWithValue("@par7", gewicht);
+                    comm.Parameters.AddWithValue("@par8", maxBelasting);
+                    comm.Parameters.AddWithValue("@par9", afmetingen);
+                    comm.Parameters.AddWithValue("@par10", eigenaarId);
+                }
+
+                int voertuigId = (int)comm.ExecuteScalar();
+                if (ImageData != null)
+                {
+                    SqlCommand commFoto = new SqlCommand(@"INSERT INTO [Foto] (data, voertuig_id) output INSERTED.ID VALUES(@par1, @par2)", conn);
+
+                    commFoto.Parameters.AddWithValue("@par1", ImageData);
+                    commFoto.Parameters.AddWithValue("@par2", voertuigId);
+
+                    commFoto.ExecuteNonQuery();
+                }
+                return voertuigId;
+            }
+        }
+
+        public void DeleteFromDB()
+        {
+            string connString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                SqlCommand comm = new SqlCommand("DELETE FROM [Voertuig] WHERE Id = @parID", conn);
+                comm.Parameters.AddWithValue("@parID", Id);
+                comm.ExecuteNonQuery();
             }
         }
     }

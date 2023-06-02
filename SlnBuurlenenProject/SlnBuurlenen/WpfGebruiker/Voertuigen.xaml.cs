@@ -58,18 +58,16 @@ namespace WpfGebruiker
 
             List<Voertuig> filteredVoertuigen = voertuigen;
 
-
             // Display the filtered vehicles
             foreach (Voertuig voertuig in filteredVoertuigen)
             {
-                // Create stackpanel to group labels
+                // Create stackpanel to group labels and buttons
                 StackPanel pnl = new StackPanel();
                 pnl.Margin = new Thickness(10);
 
-                // Create labels for name, brand, and model
                 Image img = new Image();
                 img.Width = 200;
-                img.Source = Foto.GetBitmapImageFromByteArray(voertuig.ImageData); // chatchpt voor images dynamisch toevoegen
+                img.Source = Foto.GetBitmapImageFromByteArray(voertuig.ImageData);
                 pnl.Children.Add(img);
 
                 Label lblNaam = new Label();
@@ -84,20 +82,57 @@ namespace WpfGebruiker
                 lblModel.Content = $"Model: {voertuig.Model}";
                 pnl.Children.Add(lblModel);
 
-                Button btnInfo = new Button();
-                btnInfo.Content = $"Info";
-                btnInfo.Click += (sender, e) =>
+                // Create a Grid for buttons
+                Grid buttonGrid = new Grid();
+                buttonGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }); // gebruik chatgpt om columndefinition toe te voegen
+                buttonGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
+                Button btnInfo = new Button();
+                btnInfo.Content = "Info";
+                btnInfo.HorizontalAlignment = HorizontalAlignment.Left;
+                btnInfo.Click += (sender, e) =>
                 {
                     selectedVoertuig = voertuig;
                     VoertuigInfo(sender, e);
                 };
 
-                pnl.Children.Add(btnInfo);
+                Button btnVerwijderen = new Button();
+                btnVerwijderen.Content = "Verwijderen";
 
+                btnVerwijderen.DataContext = voertuig;
+                btnVerwijderen.HorizontalAlignment = HorizontalAlignment.Right;
+                btnVerwijderen.Click += BtnVerwijderen_Click;
+
+                Button btnEdit = new Button();
+                btnEdit.Content = "Edit";
+                btnEdit.HorizontalAlignment = HorizontalAlignment.Center;
+
+                // Add buttons to the grid
+                buttonGrid.Children.Add(btnInfo);
+                buttonGrid.Children.Add(btnVerwijderen);
+                buttonGrid.Children.Add(btnEdit);
+
+                Grid.SetColumn(btnVerwijderen, 1);
+
+                pnl.Children.Add(buttonGrid);
 
                 // Add stackpanel to wrappanel
                 pnlItems.Children.Add(pnl);
+            }
+        }
+
+        private void BtnVerwijderen_Click(object sender, RoutedEventArgs e)
+        {
+            Button btnVerwijderen = (Button)sender;
+            Voertuig voertuig = (Voertuig)btnVerwijderen.DataContext;
+
+            MessageBoxResult result = MessageBox.Show("Weet je zeker dat je dit voertuig wilt verwijderen?", "Bevestig verwijdering", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                voertuig.DeleteFromDB();
+                voertuigen.Remove(voertuig);
+                UpdateVehicleDisplay();
             }
         }
 
@@ -132,7 +167,7 @@ namespace WpfGebruiker
                     detailsPage.lblModel.Content = $"Model: {selectedVoertuig.Model}";
                     detailsPage.lblBrandstof.Content = $"Type: {selectedVoertuig.Brandstof}";
                     detailsPage.lblBouwjaar.Content = $"Bouwjaar: {selectedVoertuig.Bouwjaar}";
-                    
+
                     detailsPage.lblTransmissie.Content = $"Transmissie: {selectedVoertuig.Transmissie}";
                     detailsPage.lblBeschrijving.Content = $"Beschrijving: {selectedVoertuig.Beschrijving}";
                     NavigationService.Navigate(detailsPage);
@@ -146,12 +181,14 @@ namespace WpfGebruiker
 
             if (result == MessageBoxResult.Yes)
             {
-                MijnVoertuigenGemotoriseerd detailsPage = new MijnVoertuigenGemotoriseerd();
+                MijnVoertuigenGemotoriseerd detailsPage = new MijnVoertuigenGemotoriseerd(currentUser);
+                detailsPage.Tag = 2;
                 NavigationService.Navigate(detailsPage);
             }
             else if (result == MessageBoxResult.No)
             {
-                MijnVoertuigenGetrokken detailsPage = new MijnVoertuigenGetrokken();
+                MijnVoertuigenGetrokken detailsPage = new MijnVoertuigenGetrokken(currentUser);
+                detailsPage.Tag = 1;
                 NavigationService.Navigate(detailsPage);
             }
         }

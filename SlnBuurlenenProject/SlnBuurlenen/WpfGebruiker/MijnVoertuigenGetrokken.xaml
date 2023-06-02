@@ -9,7 +9,7 @@
       Title="MijnVoertuigenGetrokken">
 
     <ScrollViewer HorizontalScrollBarVisibility="Visible">
-        <Grid Background="white">
+        <Grid Background="white" x:Name="grid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="232"/>
@@ -30,31 +30,35 @@
                 <RowDefinition Height="15*"/>
             </Grid.RowDefinitions>
 
-            <Label x:Name="lblVoertuigToevoegen" FontSize="30" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Content="Voertuig Toevoegen"/>
+            <Label x:Name="lblVoertuigToevoegen" FontSize="30" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Content="Voertuig Toevoegen Getrokken"/>
             <Label x:Name="lblAfbeeldingen" Grid.Row="1" Content="Afbeeldingen toevoegen:"></Label>
-            <Button x:Name="btnAfbeeldingen" Grid.Row="1" Grid.Column="1" Content="Uploaden"></Button>
+            <Button x:Name="btnAfbeeldingen" Grid.Row="1" Grid.Column="1" Content="Uploaden" Click="BtnAfbeeldingen_Click"></Button>
             <Image x:Name="imgVehicle" Grid.Column="0" Grid.Row="2"/>
 
-            <TextBlock x:Name="tbxNaam" Grid.Column="1" Grid.Row="3" Text="e" Margin="0 10"/>
+            <TextBox x:Name="tbxNaam" Grid.Column="1" Grid.Row="3" Text="" Margin="0 10"/>
             <Label x:Name="lblNaam" Grid.Column="0" Grid.Row="3" Content="Naam:" Padding="10 10 0 0"/>
-            <TextBlock x:Name="tbxBeschrijving" Grid.Column="1" Grid.Row="4" Text="e" Margin="0 10" Grid.ColumnSpan="2"/>
+            <TextBox x:Name="tbxBeschrijving" Grid.Column="1" Grid.Row="4" Text="" Margin="0 10" Grid.ColumnSpan="2"/>
             <Label x:Name="lblBeschrijving" Grid.Column="0" Grid.Row="4" Content="Beschrijving:" Padding="10 10 0 0"/>
-            <TextBlock x:Name="tbxMerk" Grid.Column="1" Grid.Row="5" Text="e" Margin="0 10"/>
+            <TextBox x:Name="tbxMerk" Grid.Column="1" Grid.Row="5" Text="" Margin="0 10"/>
             <Label x:Name="lblMerk" Grid.Column="0" Grid.Row="5" Content="Merk:" Padding="10 10 0 0"/>
-            <TextBlock x:Name="tbxBouwjaar" Grid.Column="1" Grid.Row="6" Text="e" Margin="0 10"/>
-            <Label x:Name="lblBouwjaar" Grid.Row="6" Content="Bouwjaar:" Padding="10 10 0 0" Grid.ColumnSpan="3"/>
-            <TextBlock x:Name="tbxGewicht" Grid.Column="1" Grid.Row="7" Text="e" Margin="0 10"/>
+            <TextBox x:Name="tbxBouwjaar" Grid.Column="1" Grid.Row="6" Text="" Margin="0 10"/>
+            <Label x:Name="lblNaamCheck" Content="Naam is veplicht" Grid.Column="2" Grid.Row="3" Padding="10 10 0 0" Foreground="#FFED1010" Visibility="Collapsed" />
+            <Label x:Name="lblBeschrijvingCheck" Content="Beschrijving is veplicht" Grid.Column="2" Grid.Row="4" Padding="10 10 0 0" Foreground="#FFED1010" Visibility="Collapsed" />
+
+            <Label x:Name="lblBouwjaar" Grid.Row="6" Content="Bouwjaar:" Padding="10 10 0 0" />
+            <TextBox x:Name="tbxGewicht" Grid.Column="1" Grid.Row="7" Text="" Margin="0 10"/>
             <Label x:Name="lblGewicht" Content="Gewicht (in kg):" Padding="10 10 10 0" Grid.Row="7" />
-            <TextBlock x:Name="tbxMaxGewicht" Grid.Column="1" Grid.Row="8" Text="e" Margin="0 10"/>
+            <TextBox x:Name="tbxMaxGewicht" Grid.Column="1" Grid.Row="8" Text="" Margin="0 10"/>
             <Label x:Name="lblMaxGewicht" Content="Max. Gewicht (in kg):" Padding="10 10 10 0" Grid.Row="8" />
-            <TextBlock x:Name="tbxAfmetingen" Grid.Column="1" Grid.Row="9" Text="e" Margin="0 10"/>
+            <TextBox x:Name="tbxAfmetingen" Grid.Column="1" Grid.Row="9" Text="" Margin="0 10"/>
             <Label x:Name="lblAfmetingen" Content="Afmetingen:" Padding="10 10 10 0" Grid.Row="9" />
-            <Label x:Name="lblGeremd" Grid.Column="2" Grid.Row="3" Content="Geremd:" Padding="10 10 0 0"/>
-            <RadioButton x:Name="rdbGeremd"></RadioButton>
-
-
-            <Button x:Name="btnAnnuleren" Grid.Row="9" Grid.Column="2" Content="Annuleren" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="10 0 0 0"/>
-            <Button x:Name="btnOpslaan" Grid.Row="9" Grid.Column="2" Content="Opslaan" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="100 0 10 0"/>
+            <Label x:Name="lblGeremd" Grid.Column="2" Grid.Row="5" Content="Geremd:" Padding="10 10 0 0" HorizontalAlignment="Left"/>
+            <StackPanel Grid.Row="5" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <RadioButton GroupName="grpGeremd" x:Name="rbnTrue" Content="ja" Padding="0 0 10 0" />
+                <RadioButton GroupName="grpGeremd" x:Name="rbnFalse" Content="nee" />
+            </StackPanel>
+            <Button x:Name="btnAnnuleren" Grid.Row="9" Grid.Column="2" Content="Annuleren" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="10 0 0 0" Click="btnAnnuleren_Click"/>
+            <Button x:Name="btnOpslaan" Grid.Row="9" Grid.Column="2" Content="Opslaan" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Margin="100 0 10 0" Click="btnOpslaan_Click"/>
             <Border Grid.Row="10" Grid.ColumnSpan="3" Background="LightGray"></Border>
         </Grid>
     </ScrollViewer>
